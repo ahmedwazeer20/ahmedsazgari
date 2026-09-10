@@ -1,0 +1,53 @@
+# ============================================
+# Decap CMS Configuration — ahmedsazgari
+# ============================================
+
+backend:
+  name: git-gateway
+  branch: main
+  # For local development without a Git backend,
+  # use the local backend instead:
+  # name: local
+
+# Local development backend (uncomment to use)
+# local_backend: true
+
+# Media uploads
+media_folder: "assets/images"
+public_folder: "./assets/images"
+
+# ============================================
+# Collections
+# ============================================
+
+collections:
+  - name: "projects"
+    label: "Projects"
+    folder: "content/projects"
+    create: true
+    slug: "{{slug}}"
+    extension: md
+    format: frontmatter
+    identifier_field: title
+    summary: "{{title}} — {{category}}"
+    sortable_fields: ["title", "category", "date"]
+    fields:
+      - { label: "Project Title", name: "title", widget: "string", required: true }
+      - label: "Category"
+        name: "category"
+        widget: "select"
+        required: true
+        options:
+          - { label: "Drone", value: "drone" }
+          - { label: "360", value: "360" }
+          - { label: "Commercial", value: "commercial" }
+          - { label: "Reels", value: "reels" }
+      - { label: "Thumbnail Image URL", name: "thumbnail", widget: "image", required: true, hint: "Upload an image or provide a URL for the project thumbnail." }
+      - label: "Video Link"
+        name: "video"
+        widget: "string"
+        required: true
+        hint: "YouTube URL or direct link to a video file (e.g. ./assets/videos/project-1.mp4)."
+      - { label: "Description", name: "description", widget: "text", required: true, hint: "Short description shown on the project card and in the modal." }
+      - { label: "Featured", name: "featured", widget: "boolean", default: false, required: false, hint: "Show this project on the homepage featured grid." }
+      - { label: "Date", name: "date", widget: "datetime", required: false }
