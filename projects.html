@@ -289,7 +289,7 @@
 
   async function loadProjects() {
     // Updated to match your exact Supabase table name "Project"
-    const { data: projects, error } = await supabaseClient.from('Project').select('*');
+    const { data: projects, error } = await supabaseClient.from('project').select('*');
     if (error) {
       console.error(error);
       return;
