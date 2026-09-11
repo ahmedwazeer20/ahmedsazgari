@@ -59,135 +59,7 @@
   <!-- ================= BLOG GRID ================= -->
   <section class="section" style="padding-top: 1rem;">
     <div class="section-container">
-      <div class="blog-grid">
-
-        <!-- Blog Post 1 -->
-        <article class="blog-card fade-up">
-          <img src="./assets/images/travel-1.jpg" alt="Aerial photography tips">
-          <div class="blog-body">
-            <div class="blog-meta">
-              <span class="tag">Photography Tips</span>
-              <span>·</span>
-              <span>Aug 28, 2026</span>
-              <span>·</span>
-              <span>6 min read</span>
-            </div>
-            <h3>5 Essential Aerial Photography Tips for Beginners</h3>
-            <p>
-              Master the fundamentals of drone photography — from golden hour
-              timing and composition rules to ND filter selection and camera
-              settings that make your shots stand out.
-            </p>
-            <a href="#" class="blog-link">Read Article →</a>
-          </div>
-        </article>
-
-        <!-- Blog Post 2 -->
-        <article class="blog-card fade-up">
-          <img src="./assets/images/travel-1.jpg" alt="Drone travel log Helsinki">
-          <div class="blog-body">
-            <div class="blog-meta">
-              <span class="tag">Travel Log</span>
-              <span>·</span>
-              <span>Aug 15, 2026</span>
-              <span>·</span>
-              <span>8 min read</span>
-            </div>
-            <h3>Drone Log: Helsinki from Above — A City of Contrasts</h3>
-            <p>
-              Exploring Helsinki's stunning coastline, historic districts, and
-              modern architecture from a bird's-eye view. My favorite spots
-              and the stories behind each flight.
-            </p>
-            <a href="#" class="blog-link">Read Article →</a>
-          </div>
-        </article>
-
-        <!-- Blog Post 3 -->
-        <article class="blog-card fade-up">
-          <img src="./assets/images/travel-1.jpg" alt="Drone travel log Europe">
-          <div class="blog-body">
-            <div class="blog-meta">
-              <span class="tag">Travel Log</span>
-              <span>·</span>
-              <span>Jul 30, 2026</span>
-              <span>·</span>
-              <span>10 min read</span>
-            </div>
-            <h3>Flying the Alps: A Drone Journey Through the Dolomites</h3>
-            <p>
-              Navigating challenging mountain terrain, unpredictable weather,
-              and strict airspace rules to capture some of Europe's most
-              dramatic landscapes.
-            </p>
-            <a href="#" class="blog-link">Read Article →</a>
-          </div>
-        </article>
-
-        <!-- Blog Post 4 -->
-        <article class="blog-card fade-up">
-          <img src="./assets/images/travel-1.jpg" alt="Drone equipment guide">
-          <div class="blog-body">
-            <div class="blog-meta">
-              <span class="tag">Gear Guide</span>
-              <span>·</span>
-              <span>Jul 12, 2026</span>
-              <span>·</span>
-              <span>7 min read</span>
-            </div>
-            <h3>The Ultimate Drone Travel Kit: What I Pack for Every Trip</h3>
-            <p>
-              From spare batteries and ND filters to portable chargers and
-              memory cards — my complete checklist for stress-free drone
-              travel across borders.
-            </p>
-            <a href="#" class="blog-link">Read Article →</a>
-          </div>
-        </article>
-
-        <!-- Blog Post 5 -->
-        <article class="blog-card fade-up">
-          <img src="./assets/images/travel-1.jpg" alt="Drone regulations Europe">
-          <div class="blog-body">
-            <div class="blog-meta">
-              <span class="tag">Regulations</span>
-              <span>·</span>
-              <span>Jun 25, 2026</span>
-              <span>·</span>
-              <span>9 min read</span>
-            </div>
-            <h3>Drone Regulations in Europe: A Practical Guide for Creators</h3>
-            <p>
-              Understanding the EU drone framework — from operator registration
-              and remote ID to no-fly zones and insurance requirements.
-              Everything you need to fly legally.
-            </p>
-            <a href="#" class="blog-link">Read Article →</a>
-          </div>
-        </article>
-
-        <!-- Blog Post 6 -->
-        <article class="blog-card fade-up">
-          <img src="./assets/images/travel-1.jpg" alt="Drone travel log Lapland">
-          <div class="blog-body">
-            <div class="blog-meta">
-              <span class="tag">Travel Log</span>
-              <span>·</span>
-              <span>Jun 08, 2026</span>
-              <span>·</span>
-              <span>11 min read</span>
-            </div>
-            <h3>Chasing the Midnight Sun: Drone Flying in Finnish Lapland</h3>
-            <p>
-              Twenty-four hours of daylight, endless forests, and reindeer
-              crossings — capturing the surreal beauty of Lapland during
-              the summer solstice.
-            </p>
-            <a href="#" class="blog-link">Read Article →</a>
-          </div>
-        </article>
-
-      </div>
+      <div class="blog-grid" id="blog-posts-container"></div>
     </div>
   </section>
 
@@ -246,5 +118,97 @@
   </footer>
 
   <script src="js/main.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    const supabaseUrl = 'https://unzlwbmoxturkdsbijqt.supabase.co';
+    const supabaseKey = 'sb_publishable_fL2Eyod5AsbBaNfie3Rivw_Q2eJjBBb';
+    const supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
+
+    async function loadBlogPosts() {
+      const { data: posts, error } = await supabaseClient
+        .from('blog')
+        .select('*')
+        .order('created_at', { ascending: false });
+
+      if (error) {
+        console.error('Error fetching blog posts:', error);
+        return;
+      }
+
+      const container = document.getElementById('blog-posts-container');
+      if (!container) return;
+      container.innerHTML = '';
+
+      if (!posts || posts.length === 0) {
+        container.innerHTML = `<p class="text-gray-400 text-center col-span-full py-8">No blog articles published yet.</p>`;
+        return;
+      }
+
+      // Inject JSON-LD Schema for Search & AI Crawlers (SEO / GEO / AEO)
+      const schemaData = {
+        "@context": "https://schema.org",
+        "@type": "Blog",
+        "name": "ahmedsazgari Aerial Drone Blog",
+        "url": "https://ahmedsazgari.vercel.app/blog.html",
+        "blogPost": posts.map(post => ({
+          "@type": "BlogPosting",
+          "headline": post.title,
+          "description": post.excerpt,
+          "image": post.image_url,
+          "author": {
+            "@type": "Person",
+            "name": post.author || "ahmedsazgari"
+          },
+          "datePublished": post.created_at,
+          "mainEntityOfPage": `https://ahmedsazgari.vercel.app/blog-post.html?slug=${post.slug || post.id}`
+        }))
+      };
+
+      const scriptSchema = document.createElement('script');
+      scriptSchema.type = 'application/ld+json';
+      scriptSchema.text = JSON.stringify(schemaData);
+      document.head.appendChild(scriptSchema);
+
+      // Render dynamic HTML cards matching your existing CSS
+      posts.forEach(post => {
+        const formattedDate = new Date(post.created_at).toLocaleDateString('en-US', {
+          year: 'numeric',
+          month: 'short',
+          day: 'numeric'
+        });
+
+        const altText = post.image_alt || `${post.title} - ahmedsazgari drone photography Helsinki`;
+        const imageElement = post.image_url 
+          ? `<img src="${post.image_url}" alt="${altText}" loading="lazy" class="w-full h-48 object-cover rounded-t-lg" />`
+          : `<div class="w-full h-48 bg-gray-700 flex items-center justify-center rounded-t-lg text-gray-400">Aerial Article</div>`;
+
+        const postUrl = post.slug ? `blog-post.html?slug=${post.slug}` : `blog-post.html?id=${post.id}`;
+
+        const card = `
+          <article class="blog-card fade-up visible" itemscope itemtype="https://schema.org/BlogPosting">
+            <a href="${postUrl}">
+              ${imageElement}
+            </a>
+            <div class="blog-body">
+              <div class="blog-meta">
+                <span class="tag">${post.category || 'Drone Media'}</span>
+                <span>·</span>
+                <time datetime="${post.created_at}">${formattedDate}</time>
+              </div>
+              <h3 itemprop="headline">
+                <a href="${postUrl}">${post.title}</a>
+              </h3>
+              <p itemprop="description">${post.excerpt || ''}</p>
+              <a href="${postUrl}" class="blog-link">Read Article →</a>
+            </div>
+          </article>
+        `;
+
+        container.innerHTML += card;
+      });
+    }
+
+    loadBlogPosts();
+  </script>
 </body>
 </html>
