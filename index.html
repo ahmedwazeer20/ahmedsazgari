@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -235,5 +236,22 @@
   </footer>
 
   <script src="js/main.js"></script>
+  <script>
+  const supabaseUrl = 'sb_publishable_fL2Eyod5AsbBaNfie3Rivw_Q2eJjBBb';
+  const supabaseKey = 'sb_publishable_fL2Eyod5AsbBaNfie3Rivw_Q2eJjBBb
+';
+  const supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
+
+  async function loadProjects() {
+    const { data: projects, error } = await supabaseClient.from('projects').select('*');
+    if (error) {
+      console.error('Error loading projects:', error);
+      return;
+    }
+    console.log('Successfully fetched projects:', projects);
+  }
+
+  loadProjects();
+</script>
 </body>
 </html>
