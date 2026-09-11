@@ -341,7 +341,7 @@
       let mediaElement = '';
 
       if (project.media_url?.includes('youtube.com') || project.media_url?.includes('youtu.be')) {
-        mediaElement = `<iframe src="${project.media_url}" class="w-full h-56 rounded-md mb-4" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
+        mediaElement = `<iframe src="${project.media_url}" class="w-full h-56 rounded-md mb-4" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen allow="autoplay"></iframe>`;
       } else if (project.media_url?.endsWith('.mp4') || project.media_url?.endsWith('.mov') || project.media_url?.endsWith('.webm')) {
         mediaElement = `<video src="${project.media_url}" controls class="w-full h-56 object-cover rounded-md mb-4"></video>`;
       } else {
