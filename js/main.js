@@ -11,7 +11,6 @@ document.addEventListener('DOMContentLoaded', () => {
   initProjectModal();
   initProjectFilters();
   initFaqAccordion();
-  initContactForm();
   initScrollReveal();
 });
 
@@ -180,37 +179,6 @@ function initFaqAccordion() {
         answer.style.maxHeight = answer.scrollHeight + 'px';
       }
     });
-  });
-}
-
-/* ---------- Contact Form Toast ---------- */
-function initContactForm() {
-  const form = document.getElementById('contactForm');
-  if (!form) return;
-
-  form.addEventListener('submit', (e) => {
-    e.preventDefault();
-
-    // Basic validation
-    const name = form.querySelector('#name');
-    const email = form.querySelector('#email');
-    const details = form.querySelector('#details');
-
-    if (!name.value.trim() || !email.value.trim() || !details.value.trim()) {
-      showToast('⚠️', 'Missing Information', 'Please fill in all required fields.');
-      return;
-    }
-
-    // Simple email validation
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email.value)) {
-      showToast('⚠️', 'Invalid Email', 'Please enter a valid email address.');
-      return;
-    }
-
-    // Simulate submission success
-    showToast('✓', 'Inquiry Sent!', `Thanks ${name.value.trim().split(' ')[0]}, I'll get back to you within 24 hours.`);
-    form.reset();
   });
 }
 
