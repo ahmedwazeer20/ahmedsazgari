@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title id="page-title">Blog Article — ahmedsazgari</title>
+  <meta id="meta-desc" name="description" content="Read aerial drone photography and videography insights by ahmedsazgari.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- ================= HEADER ================= -->
+  <header class="site-header">
+    <nav class="nav-container">
+      <a href="index.html" class="brand flex items-center gap-2">
+        <img src="Logo.jpg" alt="ahmedsazgari logo" class="w-8 h-8 rounded-full object-cover shrink-0" />
+        <span>ahmed<span>sazgari</span></span>
+      </a>
+
+      <button class="hamburger" aria-label="Toggle menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="projects.html">Projects</a></li>
+        <li><a href="services.html">Services</a></li>
+        <li><a href="blog.html">Blog</a></li>
+        <li><a href="contact.html" class="nav-cta">Get in Touch</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- ================= ARTICLE CONTENT ================= -->
+  <main class="section" style="padding-top: 2rem;">
+    <div class="section-container" style="max-width: 800px;">
+      
+      <a href="blog.html" class="text-cyan-400 hover:text-cyan-300 font-semibold mb-6 inline-block">← Back to Blog</a>
+
+      <div id="article-loader" class="text-gray-400 text-center py-12">Loading article...</div>
+
+      <article id="article-container" class="hidden" itemscope itemtype="https://schema.org/BlogPosting">
+        <div class="flex items-center gap-3 mb-4">
+          <span id="post-category" class="text-xs font-semibold bg-cyan-500/20 text-cyan-400 px-3 py-1 rounded uppercase"></span>
+          <time id="post-date" class="text-xs text-gray-400"></time>
+        </div>
+
+        <h1 id="post-title" class="text-3xl md:text-5xl font-extrabold text-white mb-6 leading-tight" itemprop="headline"></h1>
+
+        <div id="post-image-wrapper" class="mb-8 rounded-xl overflow-hidden shadow-2xl hidden">
+          <img id="post-image" src="" alt="" class="w-full h-auto max-h-[450px] object-cover" />
+        </div>
+
+        <div id="post-content" class="prose prose-invert max-w-none text-gray-300 leading-relaxed text-lg space-y-6" itemprop="articleBody">
+        </div>
+      </article>
+
+    </div>
+  </main>
+
+  <!-- ================= FOOTER ================= -->
+  <footer class="site-footer">
+    <div class="footer-container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a href="index.html" class="brand flex items-center gap-2">
+            <img src="Logo.jpg" alt="ahmedsazgari logo" class="w-8 h-8 rounded-full object-cover shrink-0" />
+            <span>ahmed<span>sazgari</span></span>
+          </a>
+          <p>
+            Aerial drone & media specialist based in Helsinki, Finland.
+            Crafting cinematic visuals from the sky.
+          </p>
+        </div>
+
+        <div>
+          <h4 class="footer-heading">Explore</h4>
+          <ul class="footer-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="projects.html">Projects</a></li>
+            <li><a href="services.html">Services</a></li>
+            <li><a href="blog.html">Blog</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="footer-heading">Connect</h4>
+          <div class="footer-social">
+            <a href="#" aria-label="Instagram">📷</a>
+            <a href="#" aria-label="YouTube">▶</a>
+            <a href="#" aria-label="LinkedIn">in</a>
+            <a href="#" aria-label="Vimeo">V</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <span>© 2026 ahmedsazgari. All rights reserved.</span>
+        <span>Helsinki, Finland · <a href="contact.html">Contact</a></span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    const supabaseUrl = 'https://unzlwbmoxturkdsbijqt.supabase.co';
+    const supabaseKey = 'sb_publishable_fL2Eyod5AsbBaNfie3Rivw_Q2eJjBBb';
+    const supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
+
+    async function loadSinglePost() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const slug = urlParams.get('slug');
+      const id = urlParams.get('id');
+
+      if (!slug && !id) {
+        document.getElementById('article-loader').textContent = 'Article not found.';
+        return;
+      }
+
+      let query = supabaseClient.from('blog').select('*');
+      if (slug) {
+        query = query.eq('slug', slug);
+      } else {
+        query = query.eq('id', id);
+      }
+
+      const { data: posts, error } = await query;
+
+      if (error || !posts || posts.length === 0) {
+        console.error('Error fetching article:', error);
+        document.getElementById('article-loader').textContent = 'Article not found.';
+        return;
+      }
+
+      const post = posts[0];
+
+      // Update Page Meta/SEO
+      document.title = `${post.title} — ahmedsazgari`;
+      if (post.excerpt) {
+        document.getElementById('meta-desc').setAttribute('content', post.excerpt);
+      }
+
+      // Populate Article Info
+      document.getElementById('post-category').textContent = post.category || 'Drone Media';
+      document.getElementById('post-date').textContent = new Date(post.created_at).toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+      });
+      document.getElementById('post-title').textContent = post.title;
+
+      // Handle Image
+      if (post.image_url) {
+        const img = document.getElementById('post-image');
+        img.src = post.image_url;
+        img.alt = post.image_alt || post.title;
+        document.getElementById('post-image-wrapper').classList.remove('hidden');
+      }
+
+      // Populate Content (Supports basic HTML formatting)
+      document.getElementById('post-content').innerHTML = post.content || post.excerpt || '';
+
+      // Toggle Views
+      document.getElementById('article-loader').classList.add('hidden');
+      document.getElementById('article-container').classList.remove('hidden');
+    }
+
+    loadSinglePost();
+  </script>
+</body>
+</html>
