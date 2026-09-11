@@ -15,6 +15,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="css/style.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
 
@@ -68,7 +69,7 @@
   <!-- ================= PROJECT GALLERY ================= -->
   <section class="section" style="padding-top: 1rem;">
     <div class="section-container">
-      <div class="project-grid">
+      <div class="project-grid" id="projects-container">
 
         <!-- Drone Projects -->
         <div class="project-card fade-up" data-category="drone" data-video="./assets/videos/project-1.mp4" data-title="Helsinki Skyline" data-desc="Cinematic aerial tour of Helsinki's iconic waterfront at golden hour.">
@@ -281,5 +282,43 @@
   </div>
 
   <script src="js/main.js"></script>
+  <script>
+  const supabaseUrl = 'https://unzlwbmoxturkdsbijqt.supabase.co';
+  const supabaseKey = 'sb_publishable_fL2Eyod5AsbBaNfie3Rivw_Q2eJjBBb'; // Paste your Supabase key here
+  const supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
+
+  async function loadProjects() {
+    // Updated to match your exact Supabase table name "Project"
+    const { data: projects, error } = await supabaseClient.from('Project').select('*');
+    if (error) {
+      console.error(error);
+      return;
+    }
+
+    const container = document.getElementById('projects-container');
+    if (!container) return;
+    container.innerHTML = '';
+
+    projects.forEach(project => {
+      // Detect if media is a video file or image
+      const isVideo = project.media_url.endsWith('.mp4') || project.media_url.endsWith('.mov') || project.media_url.endsWith('.webm');
+      
+      const mediaElement = isVideo 
+        ? `<video src="${project.media_url}" controls class="w-full h-56 object-cover rounded-md mb-4"></video>`
+        : `<img src="${project.media_url}" alt="${project.title}" class="w-full h-56 object-cover rounded-md mb-4" />`;
+
+      const card = `
+        <div class="bg-gray-800 rounded-lg overflow-hidden shadow-lg p-4">
+          ${mediaElement}
+          <h3 class="text-xl font-bold text-white mb-2">${project.title}</h3>
+          <p class="text-gray-400">${project.description}</p>
+        </div>
+      `;
+      container.innerHTML += card;
+    });
+  }
+
+  loadProjects();
+</script>
 </body>
 </html>
