@@ -173,13 +173,17 @@
     return `<img src="${poster}" alt="${project.title || ''}"${onError} />`;
   }
 
-  // Hero backdrop is the first project flagged `featured` in Supabase.
-  // Falls back to the card's tan gradient when there is no usable media.
+  // Hero backdrop is pinned to the Seurasaari Bridge drone shot — Supabase
+  // doesn't guarantee row order without an explicit `.order()`, so picking
+  // `featured` projects[0] was unreliable and could surface a different
+  // project depending on query ordering. Falls back to the first featured
+  // project (then the card's tan gradient) if that shot isn't found.
   function setHeroMedia(projects) {
     const holder = document.getElementById('hero-media');
     if (!holder || !projects || !projects.length) return;
 
-    const markup = mediaMarkup(projects[0]);
+    const hero = projects.find(p => p.title === 'Seurasaari Bridge') || projects[0];
+    const markup = mediaMarkup(hero);
     if (markup) holder.innerHTML = markup;
   }
 
