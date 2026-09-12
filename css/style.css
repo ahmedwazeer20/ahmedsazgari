@@ -1,28 +1,76 @@
 /* ============================================
    ahmedsazgari — Design Tokens & Custom Styles
+   Warm Organic Glassmorphic aesthetic:
+   sandstone/ivory canvas + frosted glass panels
+   + signal orange accent + serif/sans pairing.
    ============================================ */
 
 :root {
-  /* Design Tokens */
-  --bg-primary: #0f172a;
-  --bg-secondary: #1e293b;
-  --bg-tertiary: #334155;
-  --text-primary: #f8fafc;
-  --text-secondary: #94a3b8;
-  --text-muted: #64748b;
-  --accent: #06b6d4;
-  --accent-hover: #0891b2;
-  --accent-glow: rgba(6, 182, 212, 0.25);
-  --border-subtle: rgba(148, 163, 184, 0.15);
-  --glass-bg: rgba(15, 23, 42, 0.72);
-  --glass-border: rgba(148, 163, 184, 0.12);
-  --radius-sm: 0.5rem;
-  --radius-md: 0.875rem;
-  --radius-lg: 1.25rem;
+  /* Sandstone Cream outer canvas */
+  --bg-canvas: #F0EAE1;
+  --bg-canvas-start: #F0EAE1;
+  --bg-canvas-end: #F0EAE1;
+
+  /* Warm metallic tan gradient — hero card */
+  --hero-gradient-start: #C2B099;
+  --hero-gradient-end: #A38F75;
+
+  /* Frosted glass panels */
+  --glass-panel-bg: rgba(255, 255, 255, 0.45);
+  --glass-panel-bg-strong: rgba(255, 255, 255, 0.65);
+  --glass-panel-border: rgba(255, 255, 255, 0.65);
+  --glass-blur: 20px;
+
+  /* Floating glass pill control overlays (badges over image cards) */
+  --glass-pill-bg: rgba(255, 255, 255, 0.4);
+  --glass-pill-blur: 12px;
+  --glass-pill-border: rgba(255, 255, 255, 0.5);
+
+  /* Card surface — frosted, lets the topographic canvas read through */
+  --card-bg: rgba(255, 255, 255, 0.38);
+  --card-border: rgba(255, 255, 255, 0.75);
+
+  /* Signal Red accent */
+  --accent: #FF3000;
+  --accent-hover: #E62900;
+  --accent-glow: rgba(255, 48, 0, 0.25);
+
+  /* Typography colors */
+  --text-heading: #1C1A17;
+  --text-body: #787268;
+  --text-muted: #9C958A;
+  --text-on-accent: #FFFFFF;
+
+  /* Legacy aliases kept so any un-migrated rule still resolves sensibly */
+  --bg-primary: var(--bg-canvas);
+  --bg-secondary: var(--bg-canvas);
+  --bg-tertiary: var(--card-bg);
+  --text-primary: var(--text-heading);
+  --text-secondary: var(--text-body);
+  --border-subtle: rgba(28, 26, 23, 0.1);
+  --glass-bg: var(--glass-panel-bg);
+  --glass-border: var(--glass-panel-border);
+
+  /* Inset highlight gives the frosted surfaces an edge-lit glass rim */
+  --shadow-soft: 0 25px 50px -12px rgba(90, 75, 60, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.65);
+  --shadow-soft-hover: 0 30px 60px -12px rgba(90, 75, 60, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.8);
+  --shadow-float: 0 30px 60px -15px rgba(90, 75, 60, 0.35);
+
+  --radius-sm: 0.75rem;
+  --radius-md: 1.25rem;
+  --radius-lg: 2rem;
+  --radius-hero: 2.5rem;
+  --radius-pill: 999px;
+
   --transition-fast: 0.2s ease;
   --transition-base: 0.3s ease;
   --transition-slow: 0.5s ease;
-  --font-sans: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+
+  --font-serif: 'Playfair Display', 'Instrument Serif', Georgia, serif;
+  --font-sans: 'Plus Jakarta Sans', 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+
+  --section-py: 3.5rem;
+  --section-py-mobile: 2.5rem;
 }
 
 /* ---------- Base Reset ---------- */
@@ -40,11 +88,27 @@ html {
 
 body {
   font-family: var(--font-sans);
-  background-color: var(--bg-primary);
-  color: var(--text-primary);
+  color: var(--text-body);
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
   overflow-x: hidden;
+  background-color: var(--bg-canvas);
+}
+
+/* Topographic contour texture.
+   Lives on a fixed pseudo-element rather than a `background-attachment: fixed`
+   layer (cheaper to composite) and is click-through so it never intercepts
+   hover or tap targets. */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='900' height='900' viewBox='0 0 900 900'%3E%3Cg fill='none' stroke='%235A4B3C' stroke-width='0.85' opacity='0.04'%3E%3Cpath d='M193,142 L192,151 L186,159 L180,165 L174,171 L166,174 L159,175 L152,176 L144,176 L137,174 L130,173 L119,174 L109,171 L106,161 L111,150 L117,142 L118,136 L116,128 L119,121 L123,114 L128,108 L135,102 L144,100 L152,101 L161,102 L168,108 L170,117 L170,126 L175,130 L186,134 L193,142 Z'/%3E%3Cpath d='M204,142 L202,154 L195,163 L188,171 L180,178 L171,181 L161,182 L152,184 L144,184 L135,182 L126,181 L112,181 L99,177 L96,165 L103,152 L110,142 L110,134 L109,125 L112,116 L117,108 L124,100 L132,93 L143,90 L153,91 L164,93 L173,99 L175,112 L175,122 L181,127 L195,132 L204,142 Z'/%3E%3Cpath d='M215,142 L213,156 L204,167 L195,176 L186,185 L175,189 L164,190 L153,192 L143,192 L132,190 L121,188 L106,189 L90,184 L85,170 L94,153 L103,142 L103,132 L101,121 L105,111 L111,101 L119,92 L129,83 L142,80 L154,81 L167,83 L177,91 L181,106 L180,118 L188,124 L204,130 L215,142 Z'/%3E%3Cpath d='M225,142 L223,158 L213,171 L203,182 L192,191 L179,196 L166,198 L154,200 L142,200 L130,197 L117,196 L99,197 L81,191 L75,174 L85,155 L95,142 L96,131 L94,118 L98,106 L105,95 L114,83 L126,74 L140,71 L155,71 L170,74 L182,83 L186,100 L186,115 L194,121 L213,128 L225,142 Z'/%3E%3Cpath d='M236,142 L233,160 L222,175 L211,187 L199,198 L184,204 L169,205 L155,208 L141,209 L127,205 L113,203 L92,204 L71,198 L65,179 L77,157 L88,142 L89,129 L86,115 L91,100 L100,88 L110,75 L123,65 L139,61 L156,61 L173,64 L187,75 L191,94 L191,111 L201,119 L222,126 L236,142 Z'/%3E%3Cpath d='M247,142 L244,162 L231,179 L218,193 L205,205 L188,211 L171,213 L156,216 L140,217 L125,213 L108,211 L85,212 L62,205 L55,183 L68,159 L81,142 L81,128 L79,111 L84,95 L94,82 L105,67 L120,55 L138,51 L158,52 L176,55 L191,67 L196,88 L196,107 L207,116 L230,124 L247,142 Z'/%3E%3Cpath d='M258,142 L254,165 L240,183 L226,199 L211,212 L192,218 L174,221 L157,224 L139,225 L122,220 L104,218 L78,219 L52,211 L45,188 L59,161 L74,142 L74,126 L71,108 L77,90 L88,75 L100,59 L117,46 L137,41 L159,42 L179,46 L196,59 L202,83 L201,103 L213,113 L239,123 L258,142 Z'/%3E%3Cpath d='M495,158 L496,167 L489,174 L478,177 L472,180 L468,186 L464,195 L456,199 L448,199 L440,196 L432,193 L426,187 L423,179 L421,172 L416,166 L409,158 L408,149 L415,142 L426,139 L432,136 L436,130 L440,121 L448,117 L456,117 L464,120 L472,123 L478,129 L481,137 L483,144 L488,150 L495,158 Z'/%3E%3Cpath d='M505,158 L507,170 L498,178 L485,182 L476,185 L472,193 L467,204 L457,209 L447,208 L437,205 L427,201 L420,194 L416,184 L414,175 L407,168 L399,158 L397,146 L406,138 L419,134 L428,131 L432,123 L437,112 L447,107 L457,108 L467,111 L477,115 L484,122 L488,132 L490,141 L497,148 L505,158 Z'/%3E%3Cpath d='M515,158 L517,172 L507,182 L491,186 L481,190 L476,200 L470,212 L458,219 L446,218 L434,214 L423,209 L414,201 L409,189 L406,178 L399,169 L389,158 L387,144 L397,134 L413,130 L423,126 L428,116 L434,104 L446,97 L458,98 L470,102 L481,107 L490,115 L495,127 L498,138 L505,147 L515,158 Z'/%3E%3Cpath d='M526,158 L528,174 L515,186 L497,191 L485,195 L480,207 L472,221 L459,229 L445,227 L431,223 L418,217 L407,208 L402,194 L399,182 L390,171 L378,158 L376,142 L389,130 L407,125 L419,121 L424,109 L432,95 L445,87 L459,89 L473,93 L486,99 L497,108 L502,122 L505,134 L514,145 L526,158 Z'/%3E%3Cpath d='M536,158 L538,176 L524,190 L503,195 L490,200 L484,213 L475,230 L460,238 L444,237 L428,232 L413,226 L401,214 L396,199 L392,185 L382,173 L368,158 L366,140 L380,126 L401,121 L414,116 L420,103 L429,86 L444,78 L460,79 L476,84 L491,90 L503,102 L508,117 L512,131 L522,143 L536,158 Z'/%3E%3Cpath d='M546,158 L549,179 L533,194 L510,200 L495,205 L488,220 L478,238 L461,248 L443,247 L425,241 L408,234 L395,221 L389,204 L384,188 L373,175 L358,158 L355,137 L371,122 L394,116 L409,111 L416,96 L426,78 L443,68 L461,69 L479,75 L496,82 L509,95 L515,112 L520,128 L531,141 L546,158 Z'/%3E%3Cpath d='M556,158 L559,181 L542,198 L516,204 L499,211 L492,227 L481,247 L462,258 L442,256 L422,250 L404,242 L389,228 L382,209 L377,191 L364,177 L348,158 L345,135 L362,118 L388,112 L405,105 L412,89 L423,69 L442,58 L462,60 L482,66 L500,74 L515,88 L522,107 L527,125 L540,139 L556,158 Z'/%3E%3Cpath d='M806,148 L803,158 L792,163 L783,166 L778,170 L773,174 L769,181 L762,191 L753,194 L745,188 L739,181 L731,178 L725,172 L726,162 L727,155 L726,148 L727,141 L726,134 L722,122 L724,110 L735,108 L747,113 L754,114 L762,114 L768,117 L775,119 L783,120 L789,125 L792,133 L799,139 L806,148 Z'/%3E%3Cpath d='M818,148 L814,160 L799,166 L789,170 L783,175 L777,180 L771,189 L764,201 L752,205 L742,197 L734,189 L724,186 L717,178 L718,166 L720,156 L719,148 L719,140 L718,130 L714,116 L716,101 L730,99 L744,105 L754,106 L762,106 L770,110 L779,112 L789,113 L796,120 L800,129 L808,137 L818,148 Z'/%3E%3Cpath d='M829,148 L825,162 L807,170 L795,175 L787,181 L780,187 L774,196 L765,211 L751,216 L739,206 L730,197 L718,193 L709,184 L710,169 L713,158 L712,148 L712,138 L711,127 L705,110 L708,92 L724,89 L741,96 L753,98 L763,98 L773,102 L783,105 L795,107 L804,115 L808,126 L818,135 L829,148 Z'/%3E%3Cpath d='M841,148 L835,164 L815,174 L800,179 L792,186 L784,193 L776,204 L766,221 L750,227 L736,216 L725,205 L711,200 L701,189 L702,173 L705,159 L704,148 L705,137 L703,124 L697,104 L700,83 L719,80 L738,88 L752,91 L764,90 L775,95 L787,98 L801,100 L811,109 L816,122 L828,133 L841,148 Z'/%3E%3Cpath d='M852,148 L846,167 L823,177 L806,183 L797,191 L787,199 L779,212 L767,231 L749,238 L733,225 L721,213 L705,207 L693,195 L695,176 L698,161 L697,148 L697,135 L696,120 L688,97 L692,75 L713,70 L736,80 L751,83 L765,82 L778,88 L791,91 L807,94 L819,104 L824,119 L837,131 L852,148 Z'/%3E%3Cpath d='M863,148 L857,169 L831,181 L812,187 L801,196 L791,205 L781,220 L768,241 L747,249 L730,235 L716,221 L698,214 L685,201 L687,180 L691,162 L689,148 L690,134 L688,117 L680,91 L684,66 L708,61 L733,71 L750,75 L766,74 L780,80 L795,85 L813,87 L826,99 L832,115 L847,129 L863,148 Z'/%3E%3Cpath d='M875,148 L867,171 L839,184 L818,192 L806,202 L795,211 L784,227 L769,251 L746,260 L727,244 L712,229 L692,222 L677,207 L679,183 L683,164 L682,148 L683,132 L681,114 L671,85 L676,57 L702,52 L730,63 L749,67 L767,66 L782,73 L799,78 L819,80 L833,93 L840,111 L857,127 L875,148 Z'/%3E%3Cpath d='M184,452 L183,461 L178,468 L172,474 L166,479 L159,482 L152,484 L146,487 L138,493 L128,496 L119,492 L116,481 L117,470 L115,464 L109,459 L102,452 L100,443 L104,435 L109,428 L116,423 L124,420 L132,420 L139,420 L146,415 L155,411 L164,414 L168,423 L169,432 L172,439 L179,444 L184,452 Z'/%3E%3Cpath d='M194,452 L193,463 L187,472 L179,479 L172,485 L163,489 L155,491 L147,495 L137,502 L124,506 L114,501 L110,488 L111,474 L109,467 L101,461 L92,452 L90,441 L95,431 L101,422 L109,416 L119,413 L129,413 L138,412 L147,406 L158,402 L169,405 L174,416 L175,428 L179,436 L187,442 L194,452 Z'/%3E%3Cpath d='M204,452 L203,465 L195,476 L186,484 L178,491 L168,496 L157,499 L147,503 L136,512 L121,517 L108,511 L104,494 L105,479 L103,469 L93,462 L83,452 L80,439 L85,427 L93,417 L103,409 L115,405 L127,405 L137,404 L148,398 L162,392 L174,396 L180,409 L182,423 L186,432 L196,440 L204,452 Z'/%3E%3Cpath d='M214,452 L213,467 L204,479 L193,489 L183,498 L172,503 L160,507 L148,512 L135,521 L118,527 L103,520 L98,501 L99,483 L97,472 L85,464 L73,452 L71,437 L76,423 L86,411 L97,402 L111,398 L124,398 L136,396 L149,389 L165,382 L180,387 L187,402 L188,419 L193,429 L205,439 L214,452 Z'/%3E%3Cpath d='M224,452 L223,469 L212,483 L200,494 L189,504 L176,511 L162,514 L149,520 L134,531 L114,538 L97,529 L92,508 L94,487 L90,475 L77,466 L64,452 L61,435 L67,419 L78,405 L91,395 L106,390 L122,391 L135,389 L150,380 L168,373 L185,378 L193,396 L194,414 L200,426 L214,437 L224,452 Z'/%3E%3Cpath d='M234,452 L232,471 L221,487 L208,500 L195,510 L180,518 L165,522 L150,528 L133,541 L111,548 L92,539 L86,515 L88,491 L84,478 L69,467 L54,452 L51,433 L58,415 L70,400 L84,388 L102,383 L120,383 L135,381 L150,372 L171,363 L190,369 L199,389 L201,409 L207,423 L222,435 L234,452 Z'/%3E%3Cpath d='M244,452 L242,473 L229,491 L215,505 L200,517 L184,525 L167,529 L151,537 L132,550 L107,559 L86,548 L79,522 L82,496 L78,481 L61,469 L45,452 L41,431 L49,411 L62,394 L78,381 L98,375 L117,376 L134,373 L151,363 L174,353 L195,360 L205,382 L207,405 L215,420 L231,433 L244,452 Z'/%3E%3Cpath d='M505,448 L500,457 L491,463 L484,467 L481,473 L477,480 L469,483 L462,481 L454,483 L445,488 L435,488 L428,481 L425,472 L425,463 L427,455 L429,448 L426,441 L422,432 L422,422 L430,417 L439,415 L446,410 L454,406 L462,408 L469,416 L473,422 L479,425 L487,427 L495,432 L501,439 L505,448 Z'/%3E%3Cpath d='M516,448 L510,459 L499,466 L490,471 L486,479 L481,488 L472,491 L462,489 L453,492 L442,497 L430,497 L421,489 L418,477 L417,466 L420,456 L422,448 L418,440 L413,428 L414,416 L423,409 L434,407 L443,401 L453,396 L463,398 L471,408 L477,416 L484,419 L494,422 L503,428 L512,437 L516,448 Z'/%3E%3Cpath d='M527,448 L520,461 L507,470 L496,476 L492,485 L486,496 L475,499 L463,497 L453,500 L439,507 L424,507 L414,497 L410,483 L410,470 L412,458 L415,448 L411,438 L404,424 L405,410 L417,402 L430,399 L440,393 L451,386 L464,389 L474,400 L480,410 L489,414 L500,417 L512,424 L522,434 L527,448 Z'/%3E%3Cpath d='M538,448 L531,463 L514,473 L502,480 L497,491 L490,504 L477,507 L464,505 L452,509 L436,516 L419,516 L407,505 L402,489 L402,473 L405,459 L408,448 L403,436 L396,420 L397,404 L410,395 L425,391 L437,384 L450,376 L465,379 L476,393 L484,404 L494,408 L507,412 L521,420 L532,432 L538,448 Z'/%3E%3Cpath d='M549,448 L541,466 L522,477 L508,484 L502,497 L495,511 L480,515 L465,513 L451,517 L433,526 L413,526 L400,513 L394,494 L394,476 L398,461 L401,448 L396,435 L387,416 L388,397 L403,387 L421,383 L434,375 L449,366 L466,370 L479,385 L487,397 L499,403 L514,407 L529,416 L542,430 L549,448 Z'/%3E%3Cpath d='M560,448 L551,468 L530,480 L514,489 L508,503 L499,519 L483,524 L466,521 L450,525 L430,535 L408,535 L393,520 L387,500 L386,480 L390,462 L394,448 L388,433 L378,413 L380,391 L397,380 L416,375 L431,366 L448,356 L467,360 L481,377 L491,391 L504,397 L521,402 L538,412 L553,428 L560,448 Z'/%3E%3Cpath d='M571,448 L561,470 L538,484 L520,493 L513,509 L503,527 L485,532 L467,529 L449,534 L427,545 L402,544 L386,528 L379,505 L378,483 L383,464 L387,448 L381,432 L370,409 L372,385 L390,373 L411,367 L428,357 L447,346 L468,351 L483,370 L494,385 L509,392 L528,397 L547,409 L563,426 L571,448 Z'/%3E%3Ccircle cx='458' cy='448' r='1.6'/%3E%3Cpath d='M798,458 L796,467 L788,474 L781,479 L775,483 L769,487 L762,489 L756,493 L748,499 L738,501 L730,495 L728,485 L728,476 L722,471 L712,466 L706,458 L708,449 L716,442 L723,437 L729,433 L735,429 L742,427 L748,423 L756,417 L766,415 L774,421 L776,431 L776,440 L782,445 L792,450 L798,458 Z'/%3E%3Cpath d='M809,458 L807,470 L797,478 L787,484 L780,489 L772,493 L765,497 L757,502 L747,508 L735,511 L725,504 L722,491 L722,480 L715,474 L703,468 L695,458 L697,446 L707,438 L717,432 L724,427 L732,423 L739,419 L747,414 L757,408 L769,405 L779,412 L782,425 L782,436 L789,442 L801,448 L809,458 Z'/%3E%3Cpath d='M820,458 L817,472 L805,482 L794,489 L785,495 L776,500 L767,504 L757,510 L746,518 L731,522 L720,513 L717,497 L716,484 L708,477 L694,470 L684,458 L687,444 L699,434 L710,427 L719,421 L728,416 L737,412 L747,406 L758,398 L773,394 L784,403 L787,419 L788,432 L796,439 L810,446 L820,458 Z'/%3E%3Cpath d='M831,458 L828,474 L814,486 L801,494 L791,501 L780,507 L769,512 L758,518 L745,528 L728,532 L715,522 L711,503 L710,488 L701,481 L684,472 L673,458 L676,442 L690,430 L703,422 L713,415 L724,409 L735,404 L746,398 L759,388 L776,384 L789,394 L793,413 L794,428 L803,435 L820,444 L831,458 Z'/%3E%3Cpath d='M842,458 L838,476 L823,489 L808,498 L796,507 L784,514 L772,519 L759,527 L744,537 L725,542 L710,531 L706,510 L705,492 L694,484 L675,474 L662,458 L666,440 L681,427 L696,418 L708,409 L720,402 L732,397 L745,389 L760,379 L779,374 L794,385 L798,406 L799,424 L810,432 L829,442 L842,458 Z'/%3E%3Cpath d='M853,458 L849,479 L831,493 L814,503 L801,513 L788,521 L774,527 L760,535 L743,547 L721,552 L705,540 L700,516 L699,497 L687,487 L666,476 L651,458 L655,437 L673,423 L690,413 L703,403 L716,395 L730,389 L744,381 L761,369 L783,364 L799,376 L804,400 L805,419 L817,429 L838,440 L853,458 Z'/%3E%3Cpath d='M864,458 L859,481 L840,497 L821,508 L807,519 L792,527 L777,534 L761,543 L742,557 L718,562 L700,549 L694,522 L693,501 L680,490 L656,478 L640,458 L645,435 L664,419 L683,408 L697,397 L712,389 L727,382 L743,373 L762,359 L786,354 L804,367 L810,394 L811,415 L824,426 L848,438 L864,458 Z'/%3E%3Cpath d='M204,748 L199,757 L189,762 L181,765 L179,771 L176,779 L170,785 L162,791 L153,793 L145,788 L139,781 L134,775 L128,770 L124,763 L126,755 L128,748 L125,741 L119,731 L120,720 L128,715 L138,713 L147,713 L155,715 L161,717 L168,716 L177,715 L185,718 L189,725 L193,732 L200,739 L204,748 Z'/%3E%3Cpath d='M215,748 L209,759 L196,765 L187,769 L184,776 L180,786 L173,794 L164,801 L152,803 L142,798 L135,788 L128,781 L120,775 L115,767 L118,757 L121,748 L117,739 L110,727 L111,714 L121,707 L133,704 L144,705 L154,707 L162,710 L171,709 L182,707 L191,711 L196,720 L201,729 L210,737 L215,748 Z'/%3E%3Cpath d='M226,748 L218,761 L203,768 L193,773 L189,782 L184,793 L176,803 L165,811 L151,814 L139,808 L130,796 L123,787 L113,781 L107,771 L110,758 L114,748 L109,738 L101,722 L102,707 L114,699 L128,696 L141,697 L153,700 L163,702 L173,701 L186,699 L198,704 L204,715 L210,725 L220,735 L226,748 Z'/%3E%3Cpath d='M237,748 L228,763 L210,771 L198,777 L193,787 L188,800 L179,812 L166,821 L150,824 L136,817 L126,804 L117,793 L106,786 L99,774 L102,760 L107,748 L101,736 L92,718 L93,701 L106,691 L123,688 L139,688 L152,692 L164,695 L176,693 L191,691 L204,697 L211,709 L218,721 L230,733 L237,748 Z'/%3E%3Cpath d='M248,748 L238,765 L218,774 L204,781 L198,793 L192,808 L182,821 L167,831 L149,835 L132,827 L121,811 L111,800 L99,791 L91,778 L95,761 L100,748 L93,734 L82,714 L84,694 L99,683 L118,679 L136,680 L151,684 L164,688 L178,686 L195,683 L210,690 L218,704 L226,718 L240,731 L248,748 Z'/%3E%3Cpath d='M258,748 L247,767 L225,778 L209,785 L203,798 L197,815 L185,830 L168,841 L148,846 L129,836 L117,819 L106,806 L91,796 L83,781 L87,763 L92,748 L85,732 L73,710 L75,688 L92,675 L114,671 L133,672 L150,676 L165,680 L181,678 L200,675 L217,683 L226,699 L234,714 L249,729 L258,748 Z'/%3E%3Cpath d='M269,748 L257,769 L232,781 L215,789 L208,804 L201,822 L187,838 L169,851 L147,856 L126,846 L113,827 L100,812 L84,802 L75,785 L79,765 L85,748 L77,731 L64,706 L66,681 L85,667 L109,663 L131,663 L150,668 L166,673 L183,671 L205,667 L223,676 L233,693 L243,710 L259,726 L269,748 Z'/%3E%3Cpath d='M493,758 L492,767 L482,773 L472,776 L467,779 L466,788 L461,798 L453,803 L444,800 L436,796 L429,790 L424,784 L422,777 L419,771 L412,766 L404,758 L403,748 L411,741 L421,738 L427,734 L430,727 L435,719 L444,716 L452,719 L459,723 L466,726 L473,731 L477,737 L481,743 L487,750 L493,758 Z'/%3E%3Cpath d='M503,758 L502,769 L491,777 L478,780 L472,784 L470,796 L464,808 L454,813 L442,810 L433,804 L425,798 L419,791 L415,782 L412,774 L403,767 L394,758 L392,746 L402,737 L414,733 L422,729 L426,719 L432,710 L443,707 L453,710 L462,715 L471,719 L478,724 L484,732 L489,740 L496,748 L503,758 Z'/%3E%3Cpath d='M514,758 L512,772 L499,781 L484,784 L476,789 L474,803 L467,818 L455,824 L441,820 L430,813 L420,806 L413,797 L409,786 L405,777 L395,769 L384,758 L382,744 L393,733 L408,729 L417,723 L422,712 L429,700 L442,697 L454,701 L465,707 L475,711 L484,718 L491,727 L496,736 L505,746 L514,758 Z'/%3E%3Cpath d='M524,758 L522,774 L507,784 L489,788 L481,795 L478,810 L470,827 L456,835 L440,831 L427,822 L416,814 L408,803 L403,791 L398,780 L386,771 L373,758 L371,742 L384,730 L401,724 L412,718 L417,705 L426,691 L441,687 L455,692 L467,699 L479,704 L490,711 L498,722 L504,733 L515,744 L524,758 Z'/%3E%3Cpath d='M535,758 L533,776 L515,788 L495,792 L485,800 L482,817 L474,837 L457,845 L439,841 L424,831 L411,821 L402,809 L397,795 L391,784 L378,773 L363,758 L361,739 L375,726 L395,719 L407,712 L413,697 L423,682 L439,677 L456,683 L470,690 L484,696 L496,705 L504,717 L512,729 L524,742 L535,758 Z'/%3E%3Cpath d='M545,758 L543,778 L523,792 L501,796 L490,805 L486,824 L477,846 L458,856 L438,851 L421,840 L407,829 L396,815 L390,800 L384,787 L369,775 L353,758 L350,737 L366,722 L388,715 L402,707 L409,690 L420,673 L438,667 L457,674 L473,682 L488,689 L502,698 L511,712 L520,726 L533,740 L545,758 Z'/%3E%3Cpath d='M556,758 L553,780 L531,795 L507,801 L495,810 L490,831 L480,856 L459,866 L437,861 L418,849 L403,837 L391,822 L384,804 L377,790 L361,777 L342,758 L339,735 L357,718 L382,710 L397,701 L404,683 L417,663 L437,657 L458,665 L475,674 L492,681 L508,692 L518,707 L528,723 L542,738 L556,758 Z'/%3E%3Cpath d='M795,752 L793,762 L784,768 L777,773 L773,780 L767,784 L758,784 L751,784 L744,787 L737,787 L728,787 L717,787 L709,780 L712,768 L717,759 L717,752 L716,745 L716,738 L718,730 L720,721 L728,717 L736,715 L744,710 L753,707 L760,714 L764,725 L768,730 L774,733 L780,738 L788,744 L795,752 Z'/%3E%3Cpath d='M806,752 L804,764 L792,772 L784,778 L779,787 L771,792 L761,791 L752,792 L743,795 L734,795 L723,795 L709,795 L700,787 L703,772 L709,760 L710,752 L708,743 L709,735 L710,725 L714,714 L723,708 L733,706 L743,700 L754,697 L763,705 L768,718 L772,725 L780,729 L788,734 L797,742 L806,752 Z'/%3E%3Cpath d='M817,752 L814,766 L801,775 L791,783 L785,793 L775,799 L763,799 L753,800 L743,803 L731,804 L718,804 L702,803 L691,794 L694,776 L702,762 L702,752 L700,742 L702,731 L703,719 L707,707 L718,700 L730,697 L742,690 L755,686 L766,696 L771,712 L777,720 L786,725 L795,731 L807,740 L817,752 Z'/%3E%3Cpath d='M828,752 L825,768 L809,779 L797,788 L791,800 L780,807 L766,806 L754,808 L742,811 L729,812 L713,812 L694,812 L682,800 L686,780 L695,763 L695,752 L693,740 L694,728 L696,714 L701,699 L713,691 L727,688 L740,680 L756,676 L769,687 L775,705 L782,715 L792,720 L803,728 L816,738 L828,752 Z'/%3E%3Cpath d='M839,752 L836,771 L817,783 L804,793 L797,806 L784,814 L768,814 L755,815 L741,820 L726,820 L709,820 L687,820 L672,807 L677,784 L687,765 L688,752 L685,739 L687,725 L689,709 L694,692 L708,683 L724,679 L739,670 L757,665 L772,678 L779,699 L786,710 L798,716 L810,724 L825,736 L839,752 Z'/%3E%3Cpath d='M850,752 L846,773 L826,787 L811,798 L803,813 L788,822 L770,821 L755,823 L740,828 L723,828 L704,829 L679,828 L663,814 L668,787 L680,766 L680,752 L677,737 L679,721 L681,704 L687,685 L703,675 L722,670 L738,661 L758,655 L775,669 L783,692 L791,704 L804,711 L818,721 L835,734 L850,752 Z'/%3E%3Cpath d='M861,752 L857,775 L834,790 L818,803 L809,820 L793,830 L773,829 L756,831 L739,836 L720,837 L699,837 L672,837 L654,820 L660,791 L673,768 L673,752 L669,735 L672,718 L674,698 L681,677 L698,666 L719,662 L737,651 L759,644 L778,661 L786,686 L795,699 L810,707 L825,718 L844,732 L861,752 Z'/%3E%3Cpath d='M331,298 L328,304 L322,307 L318,310 L317,315 L315,321 L311,325 L305,324 L300,321 L295,319 L291,317 L288,314 L285,310 L281,307 L276,304 L273,298 L276,292 L282,289 L286,286 L287,281 L289,275 L293,271 L299,272 L304,275 L309,277 L313,279 L316,282 L319,286 L323,289 L328,292 L331,298 Z'/%3E%3Cpath d='M339,298 L336,305 L328,310 L323,313 L321,319 L319,327 L313,332 L306,331 L299,328 L293,325 L288,323 L283,319 L280,314 L275,310 L268,305 L265,298 L268,291 L276,286 L281,283 L283,277 L285,269 L291,264 L298,265 L305,268 L311,271 L316,273 L321,277 L324,282 L329,286 L336,291 L339,298 Z'/%3E%3Cpath d='M348,298 L343,307 L334,312 L328,317 L326,324 L323,334 L316,340 L306,339 L298,335 L291,331 L285,328 L279,323 L275,318 L269,313 L261,307 L256,298 L261,289 L270,284 L276,279 L278,272 L281,262 L288,256 L298,257 L306,261 L313,265 L319,268 L325,273 L329,278 L335,283 L343,289 L348,298 Z'/%3E%3Cpath d='M356,298 L351,308 L340,315 L332,320 L330,329 L327,341 L318,348 L307,347 L297,342 L289,338 L281,334 L275,328 L270,321 L263,316 L253,308 L248,298 L253,288 L264,281 L272,276 L274,267 L277,255 L286,248 L297,249 L307,254 L315,258 L323,262 L329,268 L334,275 L341,280 L351,288 L356,298 Z'/%3E%3Cpath d='M364,298 L359,310 L346,318 L337,323 L334,334 L330,347 L321,356 L308,354 L297,348 L287,344 L278,339 L271,333 L265,325 L257,318 L246,310 L240,298 L245,286 L258,278 L267,273 L270,262 L274,249 L283,240 L296,242 L307,248 L317,252 L326,257 L333,263 L339,271 L347,278 L358,286 L364,298 Z'/%3E%3Cpath d='M627,302 L625,308 L621,312 L618,317 L614,320 L609,322 L605,323 L600,323 L596,324 L591,323 L586,323 L579,323 L573,320 L573,313 L577,307 L579,302 L578,298 L577,293 L579,288 L582,284 L585,280 L590,277 L595,276 L601,276 L606,277 L610,281 L611,287 L612,292 L617,294 L624,297 L627,302 Z'/%3E%3Cpath d='M635,302 L633,309 L628,315 L624,321 L619,325 L613,328 L607,329 L601,330 L595,330 L589,329 L582,329 L573,329 L566,325 L566,316 L571,308 L573,302 L572,296 L571,290 L574,284 L578,279 L582,274 L587,270 L594,268 L602,268 L608,270 L613,275 L615,283 L616,289 L622,291 L631,295 L635,302 Z'/%3E%3Cpath d='M644,302 L640,311 L635,318 L630,325 L624,331 L616,333 L609,335 L602,336 L594,336 L587,335 L579,335 L568,335 L559,331 L558,320 L564,309 L568,302 L566,295 L565,287 L568,280 L573,274 L578,267 L585,262 L594,260 L602,261 L611,263 L617,269 L619,279 L620,286 L628,289 L639,293 L644,302 Z'/%3E%3Cpath d='M652,302 L648,313 L641,321 L636,329 L629,336 L619,339 L611,341 L602,342 L594,342 L585,341 L575,341 L562,342 L551,336 L551,323 L558,310 L562,302 L560,294 L559,285 L563,276 L568,269 L574,261 L583,255 L593,253 L603,253 L613,255 L620,263 L623,275 L624,283 L633,286 L646,292 L652,302 Z'/%3E%3Cpath d='M661,302 L656,314 L648,324 L641,334 L633,341 L623,345 L612,347 L603,349 L593,349 L583,347 L572,347 L557,348 L544,341 L544,326 L552,312 L557,302 L554,293 L553,282 L557,272 L564,264 L571,255 L580,248 L592,245 L604,245 L616,248 L624,257 L626,271 L628,280 L639,284 L654,290 L661,302 Z'/%3E%3Cpath d='M328,598 L326,604 L319,607 L313,609 L311,613 L310,618 L306,623 L301,624 L295,622 L291,621 L286,619 L282,615 L280,611 L277,607 L273,603 L271,598 L273,593 L278,589 L283,587 L284,582 L285,576 L289,571 L295,570 L301,574 L305,577 L309,579 L312,582 L315,586 L319,589 L324,592 L328,598 Z'/%3E%3Cpath d='M336,598 L334,606 L325,610 L318,612 L315,617 L313,624 L309,631 L302,632 L295,629 L289,627 L283,625 L278,621 L274,615 L271,610 L266,605 L263,598 L265,591 L273,587 L278,584 L280,578 L281,569 L286,563 L294,562 L301,566 L307,570 L312,574 L316,578 L320,582 L325,586 L332,591 L336,598 Z'/%3E%3Cpath d='M345,598 L342,607 L331,613 L322,616 L319,621 L317,630 L311,638 L302,639 L294,637 L286,634 L279,631 L273,626 L269,619 L265,613 L259,606 L255,598 L258,589 L267,584 L274,580 L276,573 L278,563 L284,555 L293,554 L302,559 L309,564 L315,568 L320,573 L325,578 L331,583 L339,589 L345,598 Z'/%3E%3Cpath d='M354,598 L350,609 L337,616 L327,619 L323,625 L320,636 L313,645 L303,647 L293,644 L284,640 L276,637 L268,631 L264,623 L259,615 L251,608 L247,598 L251,588 L261,582 L269,577 L272,569 L274,556 L281,547 L293,546 L303,552 L311,558 L318,563 L325,568 L330,575 L337,581 L347,588 L354,598 Z'/%3E%3Cpath d='M362,598 L358,611 L344,618 L331,622 L326,630 L324,642 L316,653 L304,655 L292,651 L282,647 L272,643 L264,636 L259,627 L253,618 L244,609 L239,598 L243,586 L255,579 L265,574 L268,564 L270,550 L279,539 L292,538 L304,545 L313,552 L322,557 L329,564 L335,571 L343,578 L355,586 L362,598 Z'/%3E%3Cpath d='M632,598 L631,604 L626,609 L621,612 L616,613 L612,615 L608,617 L604,621 L599,624 L594,623 L590,619 L585,617 L580,614 L577,609 L580,603 L584,598 L584,594 L582,589 L582,583 L584,578 L588,573 L593,571 L599,574 L604,577 L609,577 L614,578 L617,581 L618,586 L621,589 L627,593 L632,598 Z'/%3E%3Cpath d='M640,598 L639,606 L633,612 L626,615 L620,618 L614,620 L610,623 L605,628 L598,632 L592,630 L586,626 L580,622 L573,619 L570,612 L574,604 L578,598 L579,593 L576,587 L576,579 L578,572 L583,566 L591,564 L599,567 L605,570 L611,571 L617,572 L622,576 L623,583 L627,587 L634,591 L640,598 Z'/%3E%3Cpath d='M649,598 L648,608 L640,615 L631,619 L624,622 L617,624 L612,628 L606,635 L598,640 L589,638 L582,632 L575,628 L567,624 L563,615 L567,605 L573,598 L573,592 L571,584 L570,575 L573,566 L579,559 L588,556 L598,560 L606,564 L613,565 L620,566 L626,571 L628,579 L632,584 L642,590 L649,598 Z'/%3E%3Cpath d='M658,598 L656,609 L647,618 L637,623 L628,627 L620,629 L614,634 L607,642 L597,647 L587,645 L579,638 L570,633 L560,629 L556,619 L561,607 L568,598 L568,591 L565,581 L564,570 L568,560 L575,551 L586,548 L597,552 L606,558 L615,559 L624,560 L630,567 L633,576 L638,582 L649,588 L658,598 Z'/%3E%3Cpath d='M666,598 L664,611 L654,621 L642,627 L632,631 L623,634 L615,639 L607,649 L596,655 L584,652 L575,644 L565,639 L553,633 L549,622 L555,608 L562,598 L563,590 L559,579 L558,566 L562,554 L571,544 L583,541 L596,545 L607,552 L617,553 L627,554 L635,562 L638,572 L644,579 L656,586 L666,598 Z'/%3E%3C/g%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 900px 900px;
 }
 
 img,
@@ -62,17 +126,22 @@ ul {
   list-style: none;
 }
 
+h1, h2, h3, h4 {
+  font-family: var(--font-serif);
+  color: var(--text-heading);
+}
+
 /* ---------- Custom Scrollbar ---------- */
 ::-webkit-scrollbar {
   width: 10px;
 }
 
 ::-webkit-scrollbar-track {
-  background: var(--bg-primary);
+  background: var(--bg-canvas-start);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--bg-tertiary);
+  background: rgba(28, 26, 23, 0.2);
   border-radius: 999px;
 }
 
@@ -82,7 +151,7 @@ ul {
 
 ::selection {
   background: var(--accent);
-  color: var(--bg-primary);
+  color: #fff;
 }
 
 /* ============================================
@@ -93,15 +162,15 @@ ul {
   position: sticky;
   top: 0;
   z-index: 1000;
-  background: var(--glass-bg);
-  backdrop-filter: blur(18px) saturate(160%);
-  -webkit-backdrop-filter: blur(18px) saturate(160%);
-  border-bottom: 1px solid var(--glass-border);
-  transition: box-shadow var(--transition-base);
+  background: var(--glass-panel-bg-strong);
+  backdrop-filter: blur(var(--glass-blur)) saturate(160%);
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(160%);
+  border-bottom: 1px solid var(--glass-panel-border);
+  transition: box-shadow var(--transition-base), background var(--transition-base);
 }
 
 .site-header.scrolled {
-  box-shadow: 0 8px 32px rgba(2, 6, 23, 0.6);
+  box-shadow: 0 8px 32px rgba(90, 75, 60, 0.12);
 }
 
 .nav-container {
@@ -111,23 +180,24 @@ ul {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: 72px;
+  height: 76px;
 }
 
 .brand {
   display: flex;
   align-items: center;
   gap: 0.75rem;
+  font-family: var(--font-serif);
   font-weight: 700;
-  font-size: 1.15rem;
-  letter-spacing: 0.02em;
+  font-size: 1.2rem;
+  color: var(--text-heading);
 }
 
 .brand-mark {
   width: 38px;
   height: 38px;
   border-radius: 10px;
-  background: linear-gradient(135deg, var(--accent), #0e7490);
+  background: linear-gradient(135deg, var(--accent), #ffb37a);
   display: grid;
   place-items: center;
   font-size: 1.05rem;
@@ -146,9 +216,10 @@ ul {
 }
 
 .nav-links a {
-  font-size: 0.9rem;
-  font-weight: 500;
-  color: var(--text-secondary);
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: var(--text-body);
   position: relative;
   padding: 0.35rem 0;
   transition: color var(--transition-fast);
@@ -167,7 +238,7 @@ ul {
 }
 
 .nav-links a:hover {
-  color: var(--text-primary);
+  color: var(--text-heading);
 }
 
 .nav-links a:hover::after,
@@ -176,15 +247,16 @@ ul {
 }
 
 .nav-links a.active {
-  color: var(--text-primary);
+  color: var(--text-heading);
 }
 
 .nav-cta {
   background: var(--accent);
   color: #fff !important;
-  padding: 0.55rem 1.25rem !important;
-  border-radius: 999px;
-  font-weight: 600 !important;
+  padding: 0.6rem 1.4rem !important;
+  border-radius: var(--radius-pill);
+  font-weight: 700 !important;
+  box-shadow: 0 8px 20px var(--accent-glow);
   transition: background var(--transition-fast), transform var(--transition-fast) !important;
 }
 
@@ -212,7 +284,7 @@ ul {
 .hamburger span {
   width: 26px;
   height: 2px;
-  background: var(--text-primary);
+  background: var(--text-heading);
   border-radius: 999px;
   transition: transform var(--transition-base), opacity var(--transition-base);
 }
@@ -230,59 +302,78 @@ ul {
 }
 
 /* ============================================
-   Hero Section
+   Hero Section — single floating hero card:
+   warm metallic tan gradient + video, white
+   typography overlaid at the base
    ============================================ */
 
 .hero {
   position: relative;
-  min-height: 92vh;
+  padding: 2.5rem 1.5rem 2rem;
+}
+
+.hero-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.hero-card {
+  position: relative;
+  min-height: 600px;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
+  border-radius: var(--radius-hero);
+  overflow: hidden;
+  background: linear-gradient(135deg, var(--hero-gradient-start), var(--hero-gradient-end));
+  box-shadow: var(--shadow-float);
+}
+
+.hero-media {
+  position: absolute;
+  inset: 0;
   overflow: hidden;
 }
 
-.hero-video {
-  position: absolute;
-  inset: 0;
+.hero-media video,
+.hero-media img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  z-index: 0;
 }
 
+/* Weighted to the top-left so the corner text block stays readable over footage */
 .hero-overlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(
-    to bottom,
-    rgba(15, 23, 42, 0.55) 0%,
-    rgba(15, 23, 42, 0.75) 60%,
-    var(--bg-primary) 100%
-  );
-  z-index: 1;
+  background:
+    linear-gradient(to bottom, rgba(35, 26, 16, 0.78) 0%, rgba(35, 26, 16, 0.3) 55%, transparent 85%),
+    linear-gradient(to right, rgba(35, 26, 16, 0.55) 0%, transparent 60%);
+  pointer-events: none;
 }
 
 .hero-content {
   position: relative;
   z-index: 2;
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 1.5rem;
-  width: 100%;
+  padding: 3.25rem clamp(1.5rem, 4vw, 3.5rem) 3rem;
+  max-width: 960px;
 }
 
+/* Hero glass sits over unpredictable video frames, so it runs more opaque
+   than the card-level pills to keep contrast stable on any footage. */
 .hero-badge {
   display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
-  background: rgba(6, 182, 212, 0.12);
-  border: 1px solid rgba(6, 182, 212, 0.3);
-  color: var(--accent);
+  gap: 0.55rem;
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(var(--glass-pill-blur));
+  -webkit-backdrop-filter: blur(var(--glass-pill-blur));
+  border: 1px solid rgba(255, 255, 255, 0.9);
+  color: var(--text-heading);
   padding: 0.4rem 1rem;
-  border-radius: 999px;
-  font-size: 0.8rem;
-  font-weight: 500;
-  letter-spacing: 0.05em;
+  border-radius: var(--radius-pill);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
   margin-bottom: 1.5rem;
 }
@@ -292,6 +383,7 @@ ul {
   height: 6px;
   background: var(--accent);
   border-radius: 50%;
+  box-shadow: 0 0 8px var(--accent-glow);
   animation: pulse 2s infinite;
 }
 
@@ -301,24 +393,25 @@ ul {
 }
 
 .hero h1 {
-  font-size: clamp(2.5rem, 6vw, 4.5rem);
-  font-weight: 800;
-  line-height: 1.1;
-  letter-spacing: -0.02em;
+  font-family: var(--font-serif);
+  font-size: clamp(2rem, 3.9vw, 3.25rem);
+  font-weight: 700;
+  line-height: 1.14;
+  letter-spacing: -0.01em;
+  color: #fff;
   margin-bottom: 1.25rem;
+  text-wrap: balance;
 }
 
 .hero h1 .accent-text {
-  background: linear-gradient(135deg, var(--accent), #22d3ee);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
+  color: var(--accent);
+  font-style: italic;
 }
 
 .hero p {
-  font-size: clamp(1rem, 2vw, 1.2rem);
-  color: var(--text-secondary);
-  max-width: 560px;
+  font-size: clamp(0.98rem, 1.15vw, 1.08rem);
+  color: rgba(255, 255, 255, 0.85);
+  max-width: 760px;
   margin-bottom: 2rem;
 }
 
@@ -336,10 +429,11 @@ ul {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  padding: 0.8rem 1.75rem;
-  border-radius: 999px;
-  font-weight: 600;
+  padding: 0.85rem 1.85rem;
+  border-radius: var(--radius-pill);
+  font-weight: 700;
   font-size: 0.95rem;
+  letter-spacing: -0.005em;
   border: none;
   cursor: pointer;
   transition: all var(--transition-base);
@@ -348,25 +442,42 @@ ul {
 .btn-primary {
   background: var(--accent);
   color: #fff;
-  box-shadow: 0 4px 20px var(--accent-glow);
+  box-shadow: 0 8px 24px var(--accent-glow);
 }
 
 .btn-primary:hover {
   background: var(--accent-hover);
   transform: translateY(-2px);
-  box-shadow: 0 6px 28px var(--accent-glow);
+  box-shadow: 0 12px 32px var(--accent-glow);
 }
 
+/* Secondary — frosted glass pill */
 .btn-outline {
-  background: transparent;
-  color: var(--text-primary);
-  border: 1px solid var(--border-subtle);
+  background: var(--glass-panel-bg);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  color: var(--text-heading);
+  border: 1px solid var(--glass-panel-border);
 }
 
 .btn-outline:hover {
   border-color: var(--accent);
   color: var(--accent);
+  background: rgba(255, 255, 255, 0.6);
   transform: translateY(-2px);
+}
+
+/* Over hero video footage the standard glass is too translucent to stay legible */
+.hero .btn-outline {
+  background: rgba(255, 255, 255, 0.85);
+  border-color: rgba(255, 255, 255, 0.9);
+  color: var(--text-heading);
+}
+
+.hero .btn-outline:hover {
+  background: #fff;
+  border-color: #fff;
+  color: var(--accent);
 }
 
 /* ============================================
@@ -374,7 +485,7 @@ ul {
    ============================================ */
 
 .section {
-  padding: 5rem 1.5rem;
+  padding: var(--section-py) 1.5rem;
 }
 
 .section-container {
@@ -384,30 +495,53 @@ ul {
 
 .section-header {
   text-align: center;
-  margin-bottom: 3.5rem;
+  margin-bottom: 2.25rem;
 }
 
 .section-tag {
   display: inline-block;
   color: var(--accent);
   font-size: 0.8rem;
-  font-weight: 600;
-  letter-spacing: 0.12em;
+  font-weight: 700;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
-  margin-bottom: 0.75rem;
+  margin-bottom: 0.4rem;
 }
 
 .section-title {
-  font-size: clamp(1.75rem, 4vw, 2.5rem);
+  font-family: var(--font-serif);
+  font-size: clamp(1.9rem, 3.6vw, 2.75rem);
   font-weight: 700;
   letter-spacing: -0.01em;
-  margin-bottom: 1rem;
+  line-height: 1.2;
+  color: var(--text-heading);
+  margin-bottom: 0.6rem;
 }
 
 .section-subtitle {
-  color: var(--text-secondary);
+  color: var(--text-body);
   max-width: 600px;
   margin: 0 auto;
+}
+
+/* ============================================
+   Glass Panel / Card — shared floating surface
+   used by service/project/pricing/blog cards
+   and the JS-rendered grids
+   ============================================ */
+
+.glass-panel,
+.editorial-card,
+.service-card,
+.pricing-card,
+.blog-card,
+.faq-item {
+  background: var(--card-bg);
+  backdrop-filter: blur(22px) saturate(140%);
+  -webkit-backdrop-filter: blur(22px) saturate(140%);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-lg);
+  color: var(--text-heading);
 }
 
 /* ============================================
@@ -421,25 +555,22 @@ ul {
 }
 
 .service-card {
-  background: var(--bg-secondary);
-  border: 1px solid var(--border-subtle);
-  border-radius: var(--radius-lg);
   padding: 2rem;
-  transition: transform var(--transition-base), border-color var(--transition-base), box-shadow var(--transition-base);
+  box-shadow: var(--shadow-soft);
+  transition: transform var(--transition-base), box-shadow var(--transition-base);
 }
 
 .service-card:hover {
   transform: translateY(-6px);
-  border-color: rgba(6, 182, 212, 0.4);
-  box-shadow: 0 12px 40px rgba(2, 6, 23, 0.5);
+  box-shadow: var(--shadow-soft-hover);
 }
 
 .service-icon {
   width: 52px;
   height: 52px;
-  border-radius: 14px;
-  background: rgba(6, 182, 212, 0.12);
-  border: 1px solid rgba(6, 182, 212, 0.25);
+  border-radius: var(--radius-md);
+  background: var(--accent-glow);
+  border: 1px solid rgba(255, 69, 0, 0.2);
   display: grid;
   place-items: center;
   font-size: 1.5rem;
@@ -447,18 +578,22 @@ ul {
 }
 
 .service-card h3 {
+  font-family: var(--font-sans);
   font-size: 1.2rem;
-  font-weight: 600;
+  font-weight: 700;
+  color: var(--text-heading);
   margin-bottom: 0.75rem;
 }
 
 .service-card p {
-  color: var(--text-secondary);
+  color: var(--text-body);
   font-size: 0.95rem;
 }
 
 /* ============================================
-   Project Grid
+   Project Grid — static/example markup
+   (the live Supabase-rendered grid uses the
+   .editorial-card-* classes below)
    ============================================ */
 
 .project-grid {
@@ -472,14 +607,15 @@ ul {
   border-radius: var(--radius-lg);
   overflow: hidden;
   cursor: pointer;
-  background: var(--bg-secondary);
-  border: 1px solid var(--border-subtle);
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
   transition: transform var(--transition-base), box-shadow var(--transition-base);
+  box-shadow: var(--shadow-soft);
 }
 
 .project-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 12px 40px rgba(2, 6, 23, 0.6);
+  transform: translateY(-6px);
+  box-shadow: var(--shadow-soft-hover);
 }
 
 .project-card video,
@@ -498,7 +634,7 @@ ul {
 .project-overlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(to top, rgba(15, 23, 42, 0.9) 0%, transparent 60%);
+  background: linear-gradient(to top, rgba(28, 22, 15, 0.85) 0%, transparent 60%);
   display: flex;
   align-items: flex-end;
   padding: 1.5rem;
@@ -511,13 +647,15 @@ ul {
 }
 
 .project-overlay h3 {
+  font-family: var(--font-sans);
   font-size: 1.1rem;
-  font-weight: 600;
+  font-weight: 700;
+  color: #fff;
 }
 
 .project-overlay p {
   font-size: 0.85rem;
-  color: var(--text-secondary);
+  color: rgba(255, 255, 255, 0.8);
 }
 
 .project-play {
@@ -528,12 +666,13 @@ ul {
   width: 56px;
   height: 56px;
   border-radius: 50%;
-  background: rgba(6, 182, 212, 0.85);
+  background: var(--accent);
   display: grid;
   place-items: center;
   font-size: 1.25rem;
   color: #fff;
   opacity: 0;
+  box-shadow: 0 4px 20px var(--accent-glow);
   transition: all var(--transition-base);
 }
 
@@ -543,7 +682,120 @@ ul {
 }
 
 /* ============================================
-   Filter Tabs (Projects Page)
+   Editorial grid cards — used by the dynamic
+   Supabase-rendered project & blog grids
+   ============================================ */
+
+.editorial-card {
+  overflow: hidden;
+  box-shadow: var(--shadow-soft);
+  transition: transform var(--transition-base), box-shadow var(--transition-base);
+}
+
+.editorial-card:hover {
+  transform: translateY(-6px);
+  box-shadow: var(--shadow-soft-hover);
+}
+
+.editorial-card-media {
+  position: relative;
+  overflow: hidden;
+  height: 14rem;
+  border-radius: var(--radius-md);
+  margin: 0.75rem 0.75rem 0;
+}
+
+.editorial-card-media::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(28, 22, 15, 0.65) 0%, transparent 55%);
+  pointer-events: none;
+}
+
+.editorial-card-media img,
+.editorial-card-media video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: inherit;
+  transition: transform var(--transition-slow);
+}
+
+.editorial-card:hover .editorial-card-media img,
+.editorial-card:hover .editorial-card-media video {
+  transform: scale(1.05);
+}
+
+.editorial-card-cta {
+  position: absolute;
+  left: 1rem;
+  bottom: 1rem;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: var(--accent);
+  color: #fff;
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 0.45rem 0.9rem;
+  border-radius: var(--radius-pill);
+  box-shadow: 0 8px 20px var(--accent-glow);
+}
+
+.editorial-card-body {
+  padding: 1.25rem 1.5rem 1.5rem;
+}
+
+.editorial-card-body h3 {
+  font-family: var(--font-sans);
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--text-heading);
+}
+
+.editorial-card-body p {
+  color: var(--text-body);
+}
+
+.tag-pill {
+  display: inline-block;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 0.3rem 0.7rem;
+  border-radius: var(--radius-pill);
+  background: var(--glass-pill-bg);
+  backdrop-filter: blur(var(--glass-pill-blur));
+  -webkit-backdrop-filter: blur(var(--glass-pill-blur));
+  border: 1px solid var(--glass-pill-border);
+  color: var(--text-heading);
+}
+
+.tag-pill-info {
+  background: var(--glass-pill-bg);
+  color: var(--text-heading);
+}
+
+.tag-pill-action {
+  background: var(--accent);
+  border-color: transparent;
+  color: #fff;
+}
+
+/* Floating glass pill positioned directly over card imagery */
+.editorial-card-tag {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  z-index: 2;
+}
+
+/* ============================================
+   Filter Tabs (Projects Page) — glass pills
+   with a white + orange-dot active state
    ============================================ */
 
 .filter-tabs {
@@ -555,26 +807,41 @@ ul {
 }
 
 .filter-btn {
-  background: var(--bg-secondary);
-  border: 1px solid var(--border-subtle);
-  color: var(--text-secondary);
+  background: var(--glass-pill-bg);
+  backdrop-filter: blur(var(--glass-pill-blur));
+  -webkit-backdrop-filter: blur(var(--glass-pill-blur));
+  border: 1px solid var(--glass-pill-border);
+  color: var(--text-body);
   padding: 0.6rem 1.5rem;
-  border-radius: 999px;
-  font-size: 0.9rem;
-  font-weight: 500;
+  border-radius: var(--radius-pill);
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
   cursor: pointer;
   transition: all var(--transition-fast);
 }
 
 .filter-btn:hover {
   border-color: var(--accent);
-  color: var(--text-primary);
+  color: var(--text-heading);
 }
 
 .filter-btn.active {
+  background: #fff;
+  border-color: #fff;
+  color: var(--text-heading);
+  box-shadow: var(--shadow-soft);
+}
+
+.filter-btn.active::before {
+  content: '';
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  margin-right: 0.5rem;
+  border-radius: 50%;
   background: var(--accent);
-  border-color: var(--accent);
-  color: #fff;
+  box-shadow: 0 0 6px var(--accent-glow);
 }
 
 /* ============================================
@@ -589,24 +856,22 @@ ul {
 }
 
 .pricing-card {
-  background: var(--bg-secondary);
-  border: 1px solid var(--border-subtle);
-  border-radius: var(--radius-lg);
   padding: 2.25rem;
   position: relative;
   display: flex;
   flex-direction: column;
-  transition: transform var(--transition-base), border-color var(--transition-base);
+  box-shadow: var(--shadow-soft);
+  transition: transform var(--transition-base), box-shadow var(--transition-base);
 }
 
 .pricing-card:hover {
   transform: translateY(-6px);
-  border-color: rgba(6, 182, 212, 0.4);
+  box-shadow: var(--shadow-soft-hover);
 }
 
 .pricing-card.featured {
   border-color: var(--accent);
-  box-shadow: 0 0 40px var(--accent-glow);
+  box-shadow: 0 0 0 2px var(--accent), var(--shadow-soft-hover);
 }
 
 .pricing-badge {
@@ -620,20 +885,22 @@ ul {
   letter-spacing: 0.08em;
   text-transform: uppercase;
   padding: 0.35rem 0.9rem;
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
 }
 
 .pricing-name {
   font-size: 1.1rem;
-  font-weight: 600;
-  color: var(--text-secondary);
+  font-weight: 700;
+  color: var(--text-body);
   margin-bottom: 0.5rem;
 }
 
 .pricing-price {
+  font-family: var(--font-sans);
   font-size: 2.75rem;
   font-weight: 800;
   letter-spacing: -0.02em;
+  color: var(--text-heading);
   margin-bottom: 0.25rem;
 }
 
@@ -659,7 +926,7 @@ ul {
   align-items: center;
   gap: 0.75rem;
   padding: 0.5rem 0;
-  color: var(--text-secondary);
+  color: var(--text-body);
   font-size: 0.95rem;
 }
 
@@ -671,15 +938,17 @@ ul {
 
 .market-rate {
   display: inline-block;
-  background: rgba(6, 182, 212, 0.1);
-  border: 1px solid rgba(6, 182, 212, 0.25);
-  color: var(--accent);
+  background: var(--glass-pill-bg);
+  backdrop-filter: blur(var(--glass-pill-blur));
+  -webkit-backdrop-filter: blur(var(--glass-pill-blur));
+  border: 1px solid var(--glass-pill-border);
+  color: var(--text-heading);
   font-size: 0.7rem;
-  font-weight: 600;
-  letter-spacing: 0.06em;
+  font-weight: 700;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
   padding: 0.25rem 0.75rem;
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   margin-bottom: 1rem;
 }
 
@@ -693,16 +962,14 @@ ul {
 }
 
 .faq-item {
-  background: var(--bg-secondary);
-  border: 1px solid var(--border-subtle);
-  border-radius: var(--radius-md);
   margin-bottom: 0.75rem;
   overflow: hidden;
-  transition: border-color var(--transition-base);
+  box-shadow: var(--shadow-soft);
+  transition: box-shadow var(--transition-base);
 }
 
 .faq-item.active {
-  border-color: rgba(6, 182, 212, 0.4);
+  box-shadow: 0 0 0 2px var(--accent);
 }
 
 .faq-question {
@@ -713,9 +980,9 @@ ul {
   gap: 1rem;
   background: none;
   border: none;
-  color: var(--text-primary);
+  color: var(--text-heading);
   font-size: 1rem;
-  font-weight: 500;
+  font-weight: 600;
   padding: 1.25rem 1.5rem;
   cursor: pointer;
   text-align: left;
@@ -728,13 +995,15 @@ ul {
   display: grid;
   place-items: center;
   border-radius: 50%;
-  background: rgba(6, 182, 212, 0.12);
-  color: var(--accent);
+  background: var(--accent-glow);
+  color: var(--accent-hover);
   font-size: 1rem;
-  transition: transform var(--transition-base);
+  transition: transform var(--transition-base), background var(--transition-base), color var(--transition-base);
 }
 
 .faq-item.active .faq-icon {
+  background: var(--accent);
+  color: #fff;
   transform: rotate(45deg);
 }
 
@@ -746,7 +1015,7 @@ ul {
 
 .faq-answer-inner {
   padding: 0 1.5rem 1.25rem;
-  color: var(--text-secondary);
+  color: var(--text-body);
   font-size: 0.95rem;
 }
 
@@ -761,26 +1030,46 @@ ul {
 }
 
 .blog-card {
-  background: var(--bg-secondary);
-  border: 1px solid var(--border-subtle);
-  border-radius: var(--radius-lg);
   overflow: hidden;
-  transition: transform var(--transition-base), border-color var(--transition-base);
+  box-shadow: var(--shadow-soft);
+  transition: transform var(--transition-base), box-shadow var(--transition-base);
 }
 
 .blog-card:hover {
-  transform: translateY(-4px);
-  border-color: rgba(6, 182, 212, 0.4);
+  transform: translateY(-6px);
+  box-shadow: var(--shadow-soft-hover);
+}
+
+.blog-card > a {
+  display: block;
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--radius-md);
+  margin: 0.75rem 0.75rem 0;
+}
+
+.blog-card > a::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(28, 22, 15, 0.5) 0%, transparent 55%);
+  pointer-events: none;
 }
 
 .blog-card img {
   width: 100%;
   height: 200px;
   object-fit: cover;
+  border-radius: inherit;
+  transition: transform var(--transition-slow);
+}
+
+.blog-card:hover img {
+  transform: scale(1.05);
 }
 
 .blog-body {
-  padding: 1.5rem;
+  padding: 1.25rem 1.5rem 1.5rem;
 }
 
 .blog-meta {
@@ -793,35 +1082,94 @@ ul {
 }
 
 .blog-meta .tag {
-  color: var(--accent);
-  font-weight: 600;
+  color: var(--accent-hover);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-size: 0.72rem;
 }
 
 .blog-card h3 {
-  font-size: 1.15rem;
-  font-weight: 600;
+  font-family: var(--font-serif);
+  font-size: 1.25rem;
+  font-weight: 700;
+  letter-spacing: -0.005em;
   margin-bottom: 0.5rem;
-  line-height: 1.4;
+  line-height: 1.35;
+  color: var(--text-heading);
 }
 
 .blog-card p {
-  color: var(--text-secondary);
+  color: var(--text-body);
   font-size: 0.9rem;
   margin-bottom: 1rem;
 }
 
 .blog-link {
-  color: var(--accent);
-  font-size: 0.9rem;
-  font-weight: 600;
   display: inline-flex;
   align-items: center;
-  gap: 0.35rem;
-  transition: gap var(--transition-fast);
+  gap: 0.4rem;
+  background: var(--accent);
+  color: #fff;
+  font-size: 0.8rem;
+  font-weight: 700;
+  padding: 0.55rem 1.1rem;
+  border-radius: var(--radius-pill);
+  box-shadow: 0 8px 20px var(--accent-glow);
+  transition: transform var(--transition-fast), background var(--transition-fast);
 }
 
 .blog-link:hover {
-  gap: 0.6rem;
+  background: var(--accent-hover);
+  transform: translateY(-2px);
+}
+
+/* ============================================
+   Article (Blog Post) — light editorial reading canvas
+   ============================================ */
+
+.article-back-link {
+  color: var(--accent);
+  transition: color var(--transition-fast);
+}
+
+.article-back-link:hover {
+  color: var(--accent-hover);
+}
+
+.article-prose {
+  color: var(--text-body);
+  line-height: 1.85;
+}
+
+.article-prose h1,
+.article-prose h2,
+.article-prose h3,
+.article-prose h4,
+.article-prose strong,
+.article-prose b {
+  color: var(--text-heading);
+}
+
+.article-prose h2 {
+  font-family: var(--font-serif);
+  font-size: 1.6rem;
+  font-weight: 700;
+}
+
+.article-prose h3 {
+  font-family: var(--font-serif);
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+.article-prose a {
+  color: var(--accent);
+  text-decoration: underline;
+}
+
+.article-prose img {
+  border-radius: var(--radius-md);
 }
 
 /* ============================================
@@ -836,13 +1184,15 @@ ul {
 }
 
 .contact-info h3 {
-  font-size: 1.5rem;
+  font-family: var(--font-serif);
+  font-size: 1.6rem;
   font-weight: 700;
+  color: var(--text-heading);
   margin-bottom: 1rem;
 }
 
 .contact-info p {
-  color: var(--text-secondary);
+  color: var(--text-body);
   margin-bottom: 2rem;
 }
 
@@ -861,9 +1211,9 @@ ul {
 .contact-detail-icon {
   width: 44px;
   height: 44px;
-  border-radius: 12px;
-  background: rgba(6, 182, 212, 0.12);
-  border: 1px solid rgba(6, 182, 212, 0.25);
+  border-radius: var(--radius-md);
+  background: var(--accent-glow);
+  border: 1px solid rgba(255, 69, 0, 0.2);
   display: grid;
   place-items: center;
   font-size: 1.1rem;
@@ -876,7 +1226,8 @@ ul {
 }
 
 .contact-detail-value {
-  font-weight: 500;
+  font-weight: 700;
+  color: var(--text-heading);
 }
 
 .form-group {
@@ -886,8 +1237,8 @@ ul {
 .form-group label {
   display: block;
   font-size: 0.85rem;
-  font-weight: 500;
-  color: var(--text-secondary);
+  font-weight: 600;
+  color: var(--text-body);
   margin-bottom: 0.5rem;
 }
 
@@ -895,14 +1246,21 @@ ul {
 .form-group textarea,
 .form-group select {
   width: 100%;
-  background: var(--bg-secondary);
-  border: 1px solid var(--border-subtle);
+  background: var(--glass-panel-bg);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  border: 1px solid var(--glass-panel-border);
   border-radius: var(--radius-sm);
   padding: 0.85rem 1rem;
-  color: var(--text-primary);
+  color: var(--text-heading);
   font-family: inherit;
   font-size: 0.95rem;
   transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.form-group input::placeholder,
+.form-group textarea::placeholder {
+  color: var(--text-muted);
 }
 
 .form-group input:focus,
@@ -920,7 +1278,7 @@ ul {
 
 .form-group select {
   appearance: none;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23787268' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
   background-repeat: no-repeat;
   background-position: right 1rem center;
 }
@@ -936,7 +1294,7 @@ ul {
   display: none;
   align-items: center;
   justify-content: center;
-  background: rgba(2, 6, 23, 0.9);
+  background: rgba(28, 22, 15, 0.55);
   backdrop-filter: blur(8px);
   padding: 1.5rem;
 }
@@ -955,8 +1313,10 @@ ul {
   position: relative;
   width: 100%;
   max-width: 900px;
-  background: var(--bg-secondary);
-  border: 1px solid var(--border-subtle);
+  background: var(--glass-panel-bg-strong);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  border: 1px solid var(--glass-panel-border);
   border-radius: var(--radius-lg);
   overflow: hidden;
   animation: slideUp var(--transition-base);
@@ -975,9 +1335,9 @@ ul {
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  background: rgba(15, 23, 42, 0.8);
-  border: 1px solid var(--border-subtle);
-  color: var(--text-primary);
+  background: rgba(255, 255, 255, 0.7);
+  border: 1px solid var(--glass-panel-border);
+  color: var(--text-heading);
   font-size: 1.25rem;
   cursor: pointer;
   display: grid;
@@ -988,6 +1348,7 @@ ul {
 .modal-close:hover {
   background: var(--accent);
   border-color: var(--accent);
+  color: #fff;
   transform: rotate(90deg);
 }
 
@@ -1008,13 +1369,14 @@ ul {
 }
 
 .modal-info h3 {
+  font-family: var(--font-serif);
   font-size: 1.2rem;
-  font-weight: 600;
+  font-weight: 700;
   margin-bottom: 0.35rem;
 }
 
 .modal-info p {
-  color: var(--text-secondary);
+  color: var(--text-body);
   font-size: 0.9rem;
 }
 
@@ -1028,14 +1390,16 @@ ul {
   left: 50%;
   transform: translateX(-50%) translateY(120%);
   z-index: 3000;
-  background: var(--bg-secondary);
-  border: 1px solid rgba(6, 182, 212, 0.4);
+  background: var(--glass-panel-bg-strong);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  border: 1px solid var(--glass-panel-border);
   border-radius: var(--radius-md);
   padding: 1.25rem 1.75rem;
   display: flex;
   align-items: center;
   gap: 1rem;
-  box-shadow: 0 12px 48px rgba(2, 6, 23, 0.8);
+  box-shadow: var(--shadow-soft-hover);
   transition: transform var(--transition-slow);
   max-width: 90vw;
 }
@@ -1048,22 +1412,23 @@ ul {
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  background: rgba(6, 182, 212, 0.15);
-  border: 1px solid rgba(6, 182, 212, 0.4);
+  background: var(--accent-glow);
+  border: 1px solid rgba(255, 69, 0, 0.3);
   display: grid;
   place-items: center;
-  color: var(--accent);
+  color: var(--accent-hover);
   font-size: 1.1rem;
   flex-shrink: 0;
 }
 
 .toast-title {
-  font-weight: 600;
+  font-weight: 700;
   font-size: 0.95rem;
+  color: var(--text-heading);
 }
 
 .toast-message {
-  color: var(--text-secondary);
+  color: var(--text-body);
   font-size: 0.85rem;
 }
 
@@ -1072,7 +1437,7 @@ ul {
    ============================================ */
 
 .site-footer {
-  background: var(--bg-secondary);
+  background: var(--bg-canvas-end);
   border-top: 1px solid var(--border-subtle);
   padding: 3.5rem 1.5rem 2rem;
 }
@@ -1090,18 +1455,18 @@ ul {
 }
 
 .footer-brand p {
-  color: var(--text-secondary);
+  color: var(--text-body);
   font-size: 0.9rem;
   margin-top: 1rem;
   max-width: 320px;
 }
 
 .footer-heading {
-  font-size: 0.85rem;
-  font-weight: 600;
-  letter-spacing: 0.08em;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: var(--text-primary);
+  color: var(--text-heading);
   margin-bottom: 1.25rem;
 }
 
@@ -1110,7 +1475,7 @@ ul {
 }
 
 .footer-links a {
-  color: var(--text-secondary);
+  color: var(--text-body);
   font-size: 0.9rem;
   transition: color var(--transition-fast);
 }
@@ -1127,13 +1492,13 @@ ul {
 .footer-social a {
   width: 40px;
   height: 40px;
-  border-radius: 10px;
-  background: var(--bg-tertiary);
-  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  background: var(--glass-panel-bg);
+  border: 1px solid var(--glass-panel-border);
   display: grid;
   place-items: center;
   font-size: 1rem;
-  color: var(--text-secondary);
+  color: var(--text-body);
   transition: all var(--transition-fast);
 }
 
@@ -1157,7 +1522,7 @@ ul {
 }
 
 .footer-bottom a {
-  color: var(--text-secondary);
+  color: var(--text-body);
   transition: color var(--transition-fast);
 }
 
@@ -1174,7 +1539,7 @@ ul {
 }
 
 .text-secondary {
-  color: var(--text-secondary);
+  color: var(--text-body);
 }
 
 .text-muted {
@@ -1208,6 +1573,10 @@ ul {
    ============================================ */
 
 @media (max-width: 900px) {
+  .hero-card {
+    min-height: 520px;
+  }
+
   .contact-grid {
     grid-template-columns: 1fr;
     gap: 2rem;
@@ -1224,20 +1593,28 @@ ul {
     display: flex;
   }
 
+  .hero-card {
+    min-height: 460px;
+  }
+
+  .hero-content {
+    padding: 2rem 1.5rem 2.5rem;
+  }
+
   .nav-links {
     position: fixed;
     top: 0;
     right: -100%;
     width: min(320px, 80vw);
     height: 100vh;
-    background: var(--glass-bg);
+    background: var(--glass-panel-bg-strong);
     backdrop-filter: blur(24px) saturate(160%);
     -webkit-backdrop-filter: blur(24px) saturate(160%);
     flex-direction: column;
     justify-content: center;
     gap: 2rem;
     padding: 2rem;
-    border-left: 1px solid var(--glass-border);
+    border-left: 1px solid var(--glass-panel-border);
     transition: right var(--transition-base);
   }
 
@@ -1253,12 +1630,8 @@ ul {
     margin-top: 0.5rem;
   }
 
-  .hero {
-    min-height: 80vh;
-  }
-
   .section {
-    padding: 3.5rem 1.25rem;
+    padding: var(--section-py-mobile) 1.25rem;
   }
 
   .project-grid,

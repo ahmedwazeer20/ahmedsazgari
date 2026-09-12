@@ -12,7 +12,7 @@
   <meta property="og:type" content="website">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="css/style.css">
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -187,7 +187,7 @@
   </section>
 
   <!-- ================= CTA ================= -->
-  <section class="section" style="background: var(--bg-secondary);">
+  <section class="section">
     <div class="section-container text-center fade-up">
       <h2 class="section-title">Like What You See?</h2>
       <p class="section-subtitle mb-4">
@@ -221,6 +221,29 @@
   const supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
 
   let allProjects = [];
+
+  const isNativeVideo = (url) => /\.(mp4|mov|webm)$/i.test(url || '');
+  const isYouTube = (url) => /youtube\.com|youtu\.be/.test(url || '');
+
+  // YouTube's iframe player intermittently fails with "Error 153", so YouTube
+  // sources are rendered as their poster frame instead of an embedded player.
+  function youTubePoster(url) {
+    const id = (url || '').match(/(?:youtu\.be\/|youtube\.com\/(?:embed\/|watch\?v=))([A-Za-z0-9_-]{11})/);
+    return id ? `https://i.ytimg.com/vi/${id[1]}/maxresdefault.jpg` : '';
+  }
+
+  // Renders project media, preferring a real video file over a poster image.
+  function mediaMarkup(project) {
+    const url = project.media_url;
+    if (isNativeVideo(url)) {
+      return `<video src="${url}" autoplay muted loop playsinline></video>`;
+    }
+    const poster = isYouTube(url) ? youTubePoster(url) : url;
+    if (!poster) return '';
+    const fallback = isYouTube(url) ? poster.replace('maxresdefault', 'hqdefault') : '';
+    const onError = fallback ? ` onerror="this.onerror=null;this.src='${fallback}'"` : '';
+    return `<img src="${poster}" alt="${project.title || ''}"${onError} />`;
+  }
 
   async function loadProjects() {
     const { data: projects, error } = await supabaseClient.from('project').select('*');
@@ -272,31 +295,24 @@
     container.innerHTML = '';
 
     if (items.length === 0) {
-      container.innerHTML = `<p class="text-gray-400 text-center col-span-full py-8">No projects found in this category.</p>`;
+      container.innerHTML = `<p class="text-center col-span-full py-8" style="color: var(--text-muted);">No projects found in this category.</p>`;
       return;
     }
 
     items.forEach(project => {
-      let mediaElement = '';
-
-      if (project.media_url?.includes('youtube.com') || project.media_url?.includes('youtu.be')) {
-        const ytParams = 'controls=0&modestbranding=1&rel=0&iv_load_policy=3&disablekb=1&fs=0';
-        const ytSrc = project.media_url + (project.media_url.includes('?') ? '&' : '?') + ytParams;
-        mediaElement = `<div class="relative w-full h-56 overflow-hidden rounded-md mb-4"><iframe src="${ytSrc}" style="position:absolute; top:50%; left:50%; width:150%; height:150%; transform:translate(-50%,-50%); border:0; pointer-events:none;" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe></div>`;
-      } else if (project.media_url?.endsWith('.mp4') || project.media_url?.endsWith('.mov') || project.media_url?.endsWith('.webm')) {
-        mediaElement = `<video src="${project.media_url}" autoplay muted loop playsinline class="w-full h-56 object-cover rounded-md mb-4"></video>`;
-      } else {
-        mediaElement = `<img src="${project.media_url}" alt="${project.title}" class="w-full h-56 object-cover rounded-md mb-4" />`;
-      }
+      const mediaElement = mediaMarkup(project);
 
       const card = `
-        <div class="bg-gray-800 rounded-lg overflow-hidden shadow-lg p-4">
-          ${mediaElement}
-          <div class="flex justify-between items-center mb-2">
-            <h3 class="text-xl font-bold text-white">${project.title}</h3>
-            <span class="text-xs bg-cyan-500/20 text-cyan-400 px-2 py-1 rounded uppercase font-semibold">${project.category || 'General'}</span>
+        <div class="editorial-card">
+          <div class="editorial-card-media">
+            ${mediaElement}
+            <span class="tag-pill tag-pill-info editorial-card-tag">${project.category || 'General'}</span>
+            <span class="editorial-card-cta">View Flight →</span>
           </div>
-          <p class="text-gray-400 text-sm">${project.description}</p>
+          <div class="editorial-card-body">
+            <h3 class="text-xl mb-2">${project.title}</h3>
+            <p class="text-sm">${project.description}</p>
+          </div>
         </div>
       `;
       container.innerHTML += card;

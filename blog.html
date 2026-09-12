@@ -12,7 +12,7 @@
   <meta property="og:type" content="website">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="css/style.css">
 </head>
@@ -43,7 +43,7 @@
   </section>
 
   <!-- ================= NEWSLETTER CTA ================= -->
-  <section class="section" style="background: var(--bg-secondary);">
+  <section class="section">
     <div class="section-container text-center fade-up">
       <h2 class="section-title">Never Miss a Story</h2>
       <p class="section-subtitle mb-4">
@@ -79,7 +79,7 @@
       container.innerHTML = '';
 
       if (!posts || posts.length === 0) {
-        container.innerHTML = `<p class="text-gray-400 text-center col-span-full py-8">No blog articles published yet.</p>`;
+        container.innerHTML = `<p class="text-center col-span-full py-8" style="color: var(--text-muted);">No blog articles published yet.</p>`;
         return;
       }
 
@@ -119,7 +119,7 @@
         const altText = post.image_alt || `${post.title} - ahmedsazgari drone photography Helsinki`;
         const imageElement = post.image_url 
           ? `<img src="${post.image_url}" alt="${altText}" loading="lazy" class="w-full h-48 object-cover rounded-t-lg" />`
-          : `<div class="w-full h-48 bg-gray-700 flex items-center justify-center rounded-t-lg text-gray-400">Aerial Article</div>`;
+          : `<div class="w-full h-48 flex items-center justify-center rounded-t-lg" style="background: var(--glass-panel-bg); color: var(--text-muted);">Aerial Article</div>`;
 
         const postUrl = post.slug ? `blog-post.html?slug=${post.slug}` : `blog-post.html?id=${post.id}`;
 
