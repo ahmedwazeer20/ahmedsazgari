@@ -14,28 +14,7 @@
 <body>
 
   <!-- ================= HEADER ================= -->
-  <header class="site-header">
-    <nav class="nav-container">
-      <a href="index.html" class="brand flex items-center gap-2">
-        <img src="Logo.jpg" alt="ahmedsazgari logo" class="w-8 h-8 rounded-full object-cover shrink-0" />
-        <span>ahmed<span>sazgari</span></span>
-      </a>
-
-      <button class="hamburger" aria-label="Toggle menu">
-        <span></span>
-        <span></span>
-        <span></span>
-      </button>
-
-      <ul class="nav-links">
-        <li><a href="index.html">Home</a></li>
-        <li><a href="projects.html">Projects</a></li>
-        <li><a href="services.html">Services</a></li>
-        <li><a href="blog.html">Blog</a></li>
-        <li><a href="contact.html" class="nav-cta">Get in Touch</a></li>
-      </ul>
-    </nav>
-  </header>
+  <div id="nav-placeholder"></div>
 
   <!-- ================= ARTICLE CONTENT ================= -->
   <main class="section" style="padding-top: 2rem;">
@@ -65,47 +44,7 @@
   </main>
 
   <!-- ================= FOOTER ================= -->
-  <footer class="site-footer">
-    <div class="footer-container">
-      <div class="footer-grid">
-        <div class="footer-brand">
-          <a href="index.html" class="brand flex items-center gap-2">
-            <img src="Logo.jpg" alt="ahmedsazgari logo" class="w-8 h-8 rounded-full object-cover shrink-0" />
-            <span>ahmed<span>sazgari</span></span>
-          </a>
-          <p>
-            Aerial drone & media specialist based in Helsinki, Finland.
-            Crafting cinematic visuals from the sky.
-          </p>
-        </div>
-
-        <div>
-          <h4 class="footer-heading">Explore</h4>
-          <ul class="footer-links">
-            <li><a href="index.html">Home</a></li>
-            <li><a href="projects.html">Projects</a></li>
-            <li><a href="services.html">Services</a></li>
-            <li><a href="blog.html">Blog</a></li>
-          </ul>
-        </div>
-
-        <div>
-          <h4 class="footer-heading">Connect</h4>
-          <div class="footer-social">
-            <a href="#" aria-label="Instagram">📷</a>
-            <a href="#" aria-label="YouTube">▶</a>
-            <a href="#" aria-label="LinkedIn">in</a>
-            <a href="#" aria-label="Vimeo">V</a>
-          </div>
-        </div>
-      </div>
-
-      <div class="footer-bottom">
-        <span>© 2026 ahmedsazgari. All rights reserved.</span>
-        <span>Helsinki, Finland · <a href="contact.html">Contact</a></span>
-      </div>
-    </div>
-  </footer>
+  <div id="footer-placeholder"></div>
 
   <script src="js/main.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -173,6 +112,18 @@
     }
 
     loadSinglePost();
+  </script>
+  <script>
+    Promise.all([
+      fetch('nav.html').then(res => res.text()),
+      fetch('footer.html').then(res => res.text())
+    ]).then(([navHtml, footerHtml]) => {
+      document.getElementById('nav-placeholder').innerHTML = navHtml;
+      document.getElementById('footer-placeholder').innerHTML = footerHtml;
+      initHeader();
+      initHamburger();
+      initActiveLinks();
+    });
   </script>
 </body>
 </html>
