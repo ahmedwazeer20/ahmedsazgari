@@ -225,14 +225,17 @@
   const isNativeVideo = (url) => /\.(mp4|mov|webm)$/i.test(url || '');
   const isYouTube = (url) => /youtube\.com|youtu\.be/.test(url || '');
 
-  // YouTube's iframe player intermittently fails with "Error 153", so YouTube
-  // sources are rendered as their poster frame instead of an embedded player.
+  // YouTube's iframe embed has failed with Error 153 across multiple embed
+  // configurations (origin param, youtube-nocookie.com) in this environment,
+  // so YouTube sources are rendered as their thumbnail instead — this has no
+  // dependency on YouTube's embed player validation and cannot hit that error.
   function youTubePoster(url) {
-    const id = (url || '').match(/(?:youtu\.be\/|youtube\.com\/(?:embed\/|watch\?v=))([A-Za-z0-9_-]{11})/);
-    return id ? `https://i.ytimg.com/vi/${id[1]}/maxresdefault.jpg` : '';
+    const idMatch = (url || '').match(/(?:youtu\.be\/|youtube\.com\/(?:embed\/|watch\?v=))([A-Za-z0-9_-]{11})/);
+    return idMatch ? `https://i.ytimg.com/vi/${idMatch[1]}/maxresdefault.jpg` : '';
   }
 
-  // Renders project media, preferring a real video file over a poster image.
+  // Renders project media: a real video file plays natively, a YouTube
+  // source shows its thumbnail, anything else is a plain image.
   function mediaMarkup(project) {
     const url = project.media_url;
     if (isNativeVideo(url)) {
