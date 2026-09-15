@@ -38,6 +38,20 @@ export const metadata = {
   title: "Services & Pricing — ahmedsazgari | Aerial Drone Services",
   description:
     "Professional aerial drone services in Helsinki — transparent pricing and FAQ.",
+  keywords: [
+    "drone services",
+    "aerial photography pricing",
+    "360 tour",
+    "Helsinki",
+    "drone pricing",
+    "commercial drone",
+  ],
+  authors: [{ name: "ahmedsazgari" }],
+  openGraph: {
+    title: "Services & Pricing — ahmedsazgari",
+    description: "Transparent aerial drone service packages in Helsinki.",
+    type: "website",
+  },
 };
 
 export default function ServicesPage() {

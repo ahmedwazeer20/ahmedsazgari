@@ -2,6 +2,20 @@ export const metadata = {
   title: "Contact — ahmedsazgari | Start Your Aerial Project",
   description:
     "Get in touch with ahmedsazgari for aerial drone photography, videography, 360 tours and commercial media projects in Helsinki.",
+  keywords: [
+    "contact",
+    "drone inquiry",
+    "aerial photography",
+    "Helsinki",
+    "book drone",
+    "media production",
+  ],
+  authors: [{ name: "ahmedsazgari" }],
+  openGraph: {
+    title: "Contact — ahmedsazgari",
+    description: "Start your aerial drone project — send an inquiry today.",
+    type: "website",
+  },
 };
 
 export default function ContactPage() {

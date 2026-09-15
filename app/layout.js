@@ -22,9 +22,28 @@ const plusJakartaSans = Plus_Jakarta_Sans({
 });
 
 export const metadata = {
+  metadataBase: new URL("https://ahmedsazgari.vercel.app"),
   title: "ahmedsazgari — Aerial Drone & Media Specialist | Helsinki",
   description:
     "Professional aerial drone photography, videography, 360 tours and commercial media production in Helsinki, Finland.",
+  keywords: [
+    "drone",
+    "aerial",
+    "photography",
+    "videography",
+    "360 tour",
+    "Helsinki",
+    "Finland",
+    "media",
+    "commercial",
+  ],
+  authors: [{ name: "ahmedsazgari" }],
+  openGraph: {
+    title: "ahmedsazgari — Aerial Drone & Media Specialist",
+    description:
+      "Professional aerial drone photography, videography, 360 tours and commercial media production in Helsinki.",
+    type: "website",
+  },
 };
 
 export default function RootLayout({ children }) {
