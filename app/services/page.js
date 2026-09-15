@@ -124,11 +124,11 @@ export default function ServicesPage() {
 
               <ul className="pricing-features">
                 <li>Up to 4 hours on location</li>
-                <li>20 edited 4K photos</li>
-                <li>3 edited aerial video clips</li>
+                <li>10 edited 4K photos</li>
+                <li>2 edited aerial video clips</li>
                 <li>1 interactive 360 tour</li>
                 <li>Social media ready reels</li>
-                <li>Priority 48h delivery</li>
+                <li>Priority 72h delivery</li>
               </ul>
 
               <Link
