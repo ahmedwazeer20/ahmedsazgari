@@ -1,3 +1,5 @@
+@import "tailwindcss";
+
 /* ============================================
    ahmedsazgari — Design Tokens & Custom Styles
    Warm Organic Glassmorphic aesthetic:
@@ -66,8 +68,8 @@
   --transition-base: 0.3s ease;
   --transition-slow: 0.5s ease;
 
-  --font-serif: 'Playfair Display', 'Instrument Serif', Georgia, serif;
-  --font-sans: 'Plus Jakarta Sans', 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+  --font-serif: var(--font-playfair), 'Playfair Display', 'Instrument Serif', Georgia, serif;
+  --font-sans: var(--font-jakarta), 'Plus Jakarta Sans', 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
 
   --section-py: 3.5rem;
   --section-py-mobile: 2.5rem;

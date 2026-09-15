@@ -6,6 +6,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Content Manager — ahmedsazgari</title>
   <meta name="robots" content="noindex">
+  <!-- Next.js serves this page at the URL /admin (no trailing slash), so
+       Decap's relative config.yml fetch would otherwise resolve one
+       directory too high. <base> pins all relative resolution to /admin/. -->
+  <base href="/admin/">
 </head>
 <body>
   <!-- Decap CMS (formerly Netlify CMS) Admin Panel -->
