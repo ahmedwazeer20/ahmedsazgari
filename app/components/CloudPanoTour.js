@@ -1,23 +1,37 @@
 "use client";
 
-import Script from "next/script";
+import { useEffect, useRef } from "react";
 
-// CloudPano's embed snippet is a <div id="..."> the widget's own script finds
-// by ID and fills in. A raw copy-paste into JSX wouldn't run — React (like
-// any innerHTML assignment) never executes <script> tags inserted that way —
-// so the script has to be loaded via next/script instead.
+// CloudPano's script does `s.parentNode.insertBefore(iframe, s)` — it needs
+// to be an actual DOM child of this div for that to land in the right place.
+// next/script's managed strategies (afterInteractive/lazyOnload) relocate
+// the <script> tag into <head>/<body> regardless of its JSX position, which
+// silently broke this (confirmed live: the script ran and built its splash
+// screen, but as a sibling of wherever Next.js moved the tag to — not inside
+// our div, so nothing appeared where it should). Manually creating and
+// appending the script element preserves the exact structure the original
+// embed snippet relies on.
 export default function CloudPanoTour({ shortCode }) {
-  return (
-    <div id={shortCode} style={{ width: "100%", height: "100%" }}>
-      <Script
-        src="https://app.cloudpano.com/public/shareScript.js"
-        strategy="afterInteractive"
-        data-short={shortCode}
-        data-path="tours"
-        data-is-self-hosted="false"
-        width="100%"
-        height="500px"
-      />
-    </div>
-  );
+  const containerRef = useRef(null);
+
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!container) return;
+
+    const script = document.createElement("script");
+    script.src = "https://app.cloudpano.com/public/shareScript.js";
+    script.async = true;
+    script.setAttribute("data-short", shortCode);
+    script.setAttribute("data-path", "tours");
+    script.setAttribute("data-is-self-hosted", "false");
+    script.setAttribute("width", "100%");
+    script.setAttribute("height", "500px");
+    container.appendChild(script);
+
+    return () => {
+      container.innerHTML = "";
+    };
+  }, [shortCode]);
+
+  return <div id={shortCode} ref={containerRef} style={{ width: "100%", height: "100%" }} />;
 }
