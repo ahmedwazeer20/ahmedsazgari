@@ -2,11 +2,11 @@
 
 import CloudPanoTour from "./CloudPanoTour";
 
-// Projects with an interactive CloudPano 360 tour instead of a static image.
-// Keyed by title since Supabase's `project` table has no dedicated field for
-// this yet — add more titles here as more tours are created.
+// Projects with an interactive CloudPano/Panoee 360 tour instead of a static
+// image. Keyed by title since Supabase's `project` table has no dedicated
+// field for this yet — add more titles here as more tours are created.
 const CLOUDPANO_TOURS = {
-  "Luxury Villa Virtual Tour": "GweBXCQ3s",
+  "Luxury Villa Virtual Tour": "6aab177ecfc0ac486ce1bf31",
 };
 
 const isNativeVideo = (url) => /\.(mp4|mov|webm)$/i.test(url || "");
@@ -39,7 +39,7 @@ export default function ProjectMedia({ project }) {
   const kind = getMediaKind(project);
 
   if (kind === "cloudpano") {
-    return <CloudPanoTour shortCode={CLOUDPANO_TOURS[project.title]} />;
+    return <CloudPanoTour tourId={CLOUDPANO_TOURS[project.title]} title={project.title} />;
   }
 
   if (kind === "video") {
