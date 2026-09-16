@@ -1,5 +1,14 @@
 "use client";
 
+import CloudPanoTour from "./CloudPanoTour";
+
+// Projects with an interactive CloudPano 360 tour instead of a static image.
+// Keyed by title since Supabase's `project` table has no dedicated field for
+// this yet — add more titles here as more tours are created.
+const CLOUDPANO_TOURS = {
+  "Luxury Villa Virtual Tour": "GweBXCQ3s",
+};
+
 const isNativeVideo = (url) => /\.(mp4|mov|webm)$/i.test(url || "");
 const isYouTube = (url) => /youtube\.com|youtu\.be/.test(url || "");
 
@@ -14,6 +23,7 @@ function youTubePoster(url) {
 }
 
 export function getMediaKind(project) {
+  if (project?.title in CLOUDPANO_TOURS) return "cloudpano";
   const url = project?.media_url;
   if (isNativeVideo(url)) return "video";
   if (isYouTube(url)) return "youtube";
@@ -27,6 +37,10 @@ export function getMediaKind(project) {
 export default function ProjectMedia({ project }) {
   const url = project?.media_url;
   const kind = getMediaKind(project);
+
+  if (kind === "cloudpano") {
+    return <CloudPanoTour shortCode={CLOUDPANO_TOURS[project.title]} />;
+  }
 
   if (kind === "video") {
     return <video src={url} autoPlay muted loop playsInline />;
