@@ -6,7 +6,7 @@ import CloudPanoTour from "./CloudPanoTour";
 // image. Keyed by title since Supabase's `project` table has no dedicated
 // field for this yet — add more titles here as more tours are created.
 const CLOUDPANO_TOURS = {
-  "Apartment Virtual Tour": "6aab177ecfc0ac486ce1bf31",
+  "Helsinki Airbnb Apartment": "6aab177ecfc0ac486ce1bf31",
 };
 
 const isNativeVideo = (url) => /\.(mp4|mov|webm)$/i.test(url || "");
